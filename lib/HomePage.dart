@@ -7,81 +7,115 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Color de fondo blanco
+      backgroundColor: Colors.blue.withOpacity(0.7),
       appBar: AppBar(
-        backgroundColor: Colors.blue, // Color de la barra de título
-        title: const Text(
+        backgroundColor: Colors.blue.withOpacity(0.7),
+        title: Text(
           'Gestion de habitos',
-          style:  TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white, // Color del texto blanco
+            color: Colors.white,
           ),
         ),
-        centerTitle: true,
-       actions: [
-          IconButton(
-            onPressed: () {
-              // Lógica de búsqueda
-            },
-            icon: const Icon(Icons.search),
-          ),
-        ],
-
       ),
-      body: Center(
+      drawer: Container(
+        width: MediaQuery.of(context).size.width * 0.5, // Ancho personalizado del Drawer
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.6),
+                ),
+                child: const Text(
+                  'Menú',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              ListTile(
+                title: const Text('Configuración'),
+                onTap: () {
+                  // Lógica para la opción de configuración
+                },
+              ),
+              ListTile(
+                title: const Text('Ver hábitos'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HabitList()),
+                    );
+                  // Lógica para la opción de configuración
+                },
+              ),
+              ListTile(
+                title: const Text('Ver frecuencia'),
+                onTap: () {
+                  // Lógica para la opción de configuración
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              '¡Bienvenido!',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
+            SizedBox(height: 20),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                
-                // Logica para iniciar un nuevo hábito
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue, // Color del botón
-              ),
-              child: const Text(
-                'Iniciar un nuevo hábito',
-                style: TextStyle(color: Colors.white), // Color del texto blanco
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HabitList()),
-                );
-                // Logica para ver los hábitos existentes
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue, // Color del botón
-              ),
-              child: const Text(
-                'Ver Habitos existentes',
-                style: TextStyle(color: Colors.white), // Color del texto blanco
+              child: Row(
+                children: [
+                  Icon(Icons.search, color: Colors.grey),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Buscar',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Lógica para la acción del botón flotante
+        },
+        label: const Row(
+          children: [
+            Text('Crear hábito'),
+            SizedBox(width: 5),
+            Icon(Icons.add),
+          ],
+        ),
+        backgroundColor: Colors.white.withOpacity(0.9),
+        foregroundColor: Colors.blue,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.black.withOpacity(0.03),
+        backgroundColor: Colors.blue.withOpacity(0.6),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home_outlined,
               size: 30,
-              color: Colors.blue,
+              color: Colors.white,
             ),
             label: "Principal",
           ),
@@ -89,7 +123,7 @@ class HomePage extends StatelessWidget {
             icon: Icon(
               Icons.bookmark_added_outlined,
               size: 30,
-              color: Colors.blue,
+              color: Colors.white,
             ),
             label: "VEREMOS",
           ),
@@ -97,24 +131,25 @@ class HomePage extends StatelessWidget {
             icon: Icon(
               Icons.person_outline,
               size: 30,
-              color: Colors.blue,
+              color: Colors.white,
             ),
             label: "Cuenta",
           ),
         ],
         selectedLabelStyle: const TextStyle(
           fontSize: 14,
-          //fontFamily: ("ltsaeada-light"),
-          color: Colors.black,
+          color: Colors.white,
         ),
-        unselectedLabelStyle:
-            const TextStyle(fontSize: 14, fontFamily: "ltsaeada-light"),
-        selectedItemColor:  Colors.black,
-        unselectedItemColor: Colors.black,
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
         selectedFontSize: 15,
         unselectedFontSize: 15,
         elevation: 0.0,
       ),
     );
   }
-} 
+}
