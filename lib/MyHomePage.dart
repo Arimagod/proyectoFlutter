@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto/UsersPage.dart';
-import 'package:proyecto/Statuses.dart';
 import 'package:proyecto/Frequencies.dart';
 import 'package:proyecto/HabitTypes.dart';
 import 'package:proyecto/Habits.dart';
 import 'package:proyecto/screens/users/UserList.dart';
+import 'package:proyecto/screens/statuses/StatusList.dart';
 
 
 
@@ -74,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Statuses(title: 'Estados de habitos')),
+                  MaterialPageRoute(builder: (context) => const StatusList()),
                 );
               },
                 child:Container(

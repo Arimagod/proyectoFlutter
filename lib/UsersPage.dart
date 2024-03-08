@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto/screens/users/UserItem.dart';
 import 'package:proyecto/screens/users/UserList.dart';
 
 class UsersPage extends StatefulWidget {

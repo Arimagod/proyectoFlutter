@@ -1,4 +1,4 @@
-class Habit{
+class Habit {
   final int id;
   final String name;
   final String description;
@@ -17,28 +17,15 @@ class Habit{
     required this.habitTypeId,
   });
 
-  factory Habit.fromJson(Map<String, dynamic> json){
-    return switch(json){{
-      'id': int id,
-      'name ': String name,
-      'description': String description,
-      'user_id': int userId,
-      'status_id': int statusId,
-      'frequency_id': int frequencyId,
-      'habit_type_id': int habitTypeId,
-      
-    }=> 
-    Habit(
-      id: id,
-      name: name,
-      description: description,
-      userId: userId,
-      statusId: statusId,
-      frequencyId: frequencyId,
-      habitTypeId: habitTypeId,
-      
-    ),
-    _=> throw const FormatException('Fallo al cargar modelo'),
-    };
+  factory Habit.fromJson(Map<String, dynamic> json) {
+    return Habit(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      userId: json['user_id'] as int,
+      statusId: json['status_id'] as int,
+      frequencyId: json['frequency_id'] as int,
+      habitTypeId: json['habit_type_id'] as int,
+    );
   }
 }
