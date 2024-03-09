@@ -4,9 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:proyecto/HomePage.dart';
 
 class AuthService {
-  static Future<void> login(BuildContext context, String email, String password) async {
+  static Future<void> login(
+      BuildContext context, String email, String password) async {
     final url = Uri.parse('http://127.0.0.1:8000/api/auth/login');
-  
+
     try {
       final response = await http.post(
         url,
@@ -16,28 +17,27 @@ class AuthService {
         },
       );
 
+      final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
         final accessToken = responseData['access_token'];
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } else {
-        final responseData = json.decode(response.body);
         final errorMessage = responseData['response'];
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Error de inicio de sesión'),
+              title: const Text('Error de inicio de sesión'),
               content: Text(errorMessage),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -51,7 +51,7 @@ class AuthService {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Error'),
-            content: Text('Ocurrió un error al intentar iniciar sesión.'),
+            content: Text('Faltan datos en el formulario'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

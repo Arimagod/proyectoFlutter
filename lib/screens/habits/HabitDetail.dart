@@ -5,7 +5,7 @@ import 'dart:convert';
 
 Future<List<Habit>> fetchHabit() async {
   final response = await http.get(
-    Uri.parse('http://127.0.0.1:8000/api/habit'),
+    Uri.parse('http://127.0.0.1:8000/api/habits'),
   );
 
   if (response.statusCode == 200) {

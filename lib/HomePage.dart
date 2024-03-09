@@ -1,18 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto/screens/habits/HabitList.dart';
+import 'package:http/http.dart' as http;
+import 'package:proyecto/LoginPage.dart';
+import 'dart:convert';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
+import 'package:proyecto/screens/habits/HabitItem.dart';
+import 'package:proyecto/screens/habits/HabitList.dart';
+import 'package:proyecto/screens/users/UserProfile.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+    class HomePage extends StatefulWidget {
+      const HomePage({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+      @override
+      _HomePageState createState() => _HomePageState();
+    }
+
+    class _HomePageState extends State<HomePage> {
+      final TextEditingController _searchController = TextEditingController();
+      List<dynamic> _habitTypes = [];
+
+      Future<void> searchHabitTypes(String letter) async {
+        if (letter.isEmpty) {
+          setState(() {
+            _habitTypes.clear();
+          });
+          return;
+        }
+        var url = Uri.parse('http://127.0.0.1:8000/api/search/$letter');
+        var response = await http.get(url);
+        if (response.statusCode == 200) {
+          setState(() {
+            _habitTypes = json.decode(response.body);
+          });
+        } else {
+          throw Exception('Failed to load habit types');
+        }
+      }
+
+      Future<void> goToHabitItem(int habitId) async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HabitItem(id: habitId)),
+        );
+      }
+
+      @override
+      Widget build(BuildContext context) {
+        return Scaffold(
       backgroundColor: Colors.blue.withOpacity(0.7),
       appBar: AppBar(
         backgroundColor: Colors.blue.withOpacity(0.7),
         title: const Text(
-          'Gestion de habitos',
+          'Gestión de hábitos',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -20,7 +58,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       drawer: Container(
-        width: MediaQuery.of(context).size.width * 0.75, // Ancho personalizado del Drawer
+        width: MediaQuery.of(context).size.width * 0.75,
         child: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -38,28 +76,30 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               ListTile(
-                title: const Text('Configuración'),
-                onTap: () {
-                  // Lógica para la opción de configuración
-                },
-              ),
-              ListTile(
                 title: const Text('Ver hábitos'),
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HabitList()),
-                    );
-                  // Lógica para la opción de configuración
+                    context,
+                    MaterialPageRoute(builder: (context) => const HabitList()),
+                  );
                 },
               ),
               ListTile(
                 title: const Text('Detalles de hábitos'),
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HabitDetail()),
-                    );
+                    context,
+                    MaterialPageRoute(builder: (context) => const HabitDetail()),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Cerrar Sesion'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage(title: '')),
+                  );
                 },
               ),
             ],
@@ -67,32 +107,57 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Padding(
-        
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.search, color: Colors.grey),
+                  const Icon(Icons.search, color: Colors.grey),
                   SizedBox(width: 10),
                   Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        searchHabitTypes(value);
+                      },
+                      decoration: const InputDecoration(
                         hintText: 'Buscar',
                         border: InputBorder.none,
                       ),
                     ),
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: _habitTypes.isEmpty
+                  ? Container() // Si la lista está vacía, no mostrar nada
+                  : ListView.builder(
+                itemCount: _habitTypes.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(
+                      _habitTypes[index]['type'],
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: null, // Esto elimina el icono de búsqueda
+                    onTap: () {
+                      var habitId = _habitTypes[index]['id'];
+                      goToHabitItem(habitId);
+                    },
+                  );
+                },
               ),
             ),
           ],
@@ -114,48 +179,58 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.blue.withOpacity(0.6),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-              size: 30,
-              color: Colors.white,
-            ),
-            label: "Principal",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.bookmark_added_outlined,
-              size: 30,
-              color: Colors.white,
-            ),
-            label: "VEREMOS",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_outline,
-              size: 30,
-              color: Colors.white,
-            ),
-            label: "Cuenta",
-          ),
-        ],
-        selectedLabelStyle: const TextStyle(
-          fontSize: 14,
-          color: Colors.white,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 14,
-          color: Colors.white,
-        ),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-        selectedFontSize: 15,
-        unselectedFontSize: 15,
-        elevation: 0.0,
+  type: BottomNavigationBarType.fixed,
+  backgroundColor: Colors.blue.withOpacity(0.6),
+  items: const <BottomNavigationBarItem>[
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.home_outlined,
+        size: 30,
+        color: Colors.white,
       ),
+      label: "Principal",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.bookmark_added_outlined,
+        size: 30,
+        color: Colors.white,
+      ),
+      label: "VEREMOS",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.person_outline,
+        size: 30,
+        color: Colors.white,
+      ),
+      label: "Cuenta",
+    ),
+  ],
+  selectedLabelStyle: const TextStyle(
+    fontSize: 14,
+    color: Colors.white,
+  ),
+  unselectedLabelStyle: const TextStyle(
+    fontSize: 14,
+    color: Colors.white,
+  ),
+  selectedItemColor: Colors.white,
+  unselectedItemColor: Colors.white,
+  selectedFontSize: 15,
+  unselectedFontSize: 15,
+  onTap: (int index) {
+  
+    if (index == 2) { // Verifica si el índice seleccionado es para "Cuenta"
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => UserProfile()), // Navega a la página UserProfile
+      );
+    }
+  },
+  elevation: 0.0,
+),
     );
-  }
-}
+
+    }
+ }

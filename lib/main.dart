@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 // import 'package:proyecto/MyHomePage.dart';
 import 'package:proyecto/LoginPage.dart';
 import 'package:proyecto/HomePage.dart';
-import 'package:proyecto/MyHomePage.dart';
 
 
 
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
         ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 54, 244, 101)),
         useMaterial3: true,
       ),
-      home: const LoginPage(title:""),
+      home: const LoginPage(title:  "",),
     );
   }
 }
