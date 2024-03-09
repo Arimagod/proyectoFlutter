@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/screens/login/loginRegister.dart';
 import 'package:proyecto/HomePage.dart';
-
+import 'package:proyecto/screens/login/AuthService.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);
@@ -10,6 +10,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _emailController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Container(
@@ -43,10 +46,11 @@ class LoginPage extends StatelessWidget {
               ),
               SizedBox(height: 20), // Espaciado
               TextFormField(
+                controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'Usuario',
+                  labelText: 'Email',
                   labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)), // Label transparente
-                  prefixIcon: Icon(Icons.person, color: Colors.white.withOpacity(0.7)), // Icono transparente
+                  prefixIcon: Icon(Icons.email, color: Colors.white.withOpacity(0.7)), // Icono transparente
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide(color: Colors.white.withOpacity(0.5)), // Borde transparente
@@ -55,6 +59,7 @@ class LoginPage extends StatelessWidget {
               ),
               SizedBox(height: 20), // Espaciado
               TextFormField(
+                controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Contraseña',
                   labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)), // Label transparente
@@ -69,10 +74,7 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 40), // Espaciado
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
+                  AuthService.login(context, _emailController.text, _passwordController.text);
                   // Lógica para el inicio de sesión
                 },
                 style: ElevatedButton.styleFrom(

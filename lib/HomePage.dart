@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/screens/habits/HabitList.dart';
+import 'package:proyecto/screens/habits/HabitDetail.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -53,9 +54,12 @@ class HomePage extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: const Text('Ver frecuencia'),
+                title: const Text('Detalles de hábitos'),
                 onTap: () {
-                  // Lógica para la opción de configuración
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HabitDetail()),
+                    );
                 },
               ),
             ],
@@ -69,31 +73,6 @@ class HomePage extends StatelessWidget {
           
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HabitList()),
-                  );
-                  // Lógica para el inicio de sesión
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.9), // Botón blanco semi-transparente
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  'Iniciar Sesión',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                    letterSpacing: 1.5, // Espaciado entre letras
-                  ),
-                ),
-              ),
             SizedBox(height: 20),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),

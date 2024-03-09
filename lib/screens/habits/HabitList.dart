@@ -73,9 +73,27 @@ class _HabitPageState extends State<HabitList> {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.blue[50],
                       ),
-                      child: Center(child:
-                      Text(habit.habitType.type,
-                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            habit.habitType.type,
+                           ),
+                          // SizedBox(height: 8), // Espacio entre los textos, si lo deseas
+                          // Text(
+                          //    habit.frequency.frequency,
+                          // ),
+                          // SizedBox(height: 8), // Espacio entre los textos, si lo deseas
+                          // Text(
+                          //   habit.status.status,
+                          // ),
+                          // SizedBox(height: 8), // Espacio entre los textos, si lo deseas
+                          // Text(
+                          //   habit.user.name,
+                          // )
+                          // Puedes agregar más Text widgets aquí si lo deseas
+                        ],
                       ),
                     ),
                   );
