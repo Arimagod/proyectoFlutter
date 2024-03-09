@@ -74,7 +74,7 @@ class _HabitPageState extends State<HabitList> {
                         color: Colors.blue[50],
                       ),
                       child: Center(child:
-                      Text(habit.description,
+                      Text(habit.habitType.type,
                       ),
                       ),
                     ),

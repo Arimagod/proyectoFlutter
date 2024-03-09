@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.blue.withOpacity(0.7),
       appBar: AppBar(
         backgroundColor: Colors.blue.withOpacity(0.7),
-        title: Text(
+        title: const Text(
           'Gestion de habitos',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       drawer: Container(
-        width: MediaQuery.of(context).size.width * 0.5, // Ancho personalizado del Drawer
+        width: MediaQuery.of(context).size.width * 0.75, // Ancho personalizado del Drawer
         child: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -63,10 +63,37 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Padding(
+        
         padding: const EdgeInsets.all(20.0),
         child: Column(
+          
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HabitList()),
+                  );
+                  // Lógica para el inicio de sesión
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.9), // Botón blanco semi-transparente
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Iniciar Sesión',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                    letterSpacing: 1.5, // Espaciado entre letras
+                  ),
+                ),
+              ),
             SizedBox(height: 20),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -74,7 +101,7 @@ class HomePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
               ),
-              child: Row(
+              child: const Row(
                 children: [
                   Icon(Icons.search, color: Colors.grey),
                   SizedBox(width: 10),

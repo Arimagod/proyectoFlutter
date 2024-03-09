@@ -114,7 +114,7 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 20), // Espaciado
               Column( // Nueva Columna para el texto y los iconos
                 children: <Widget>[
-                  Text(
+                  const Text(
                     '¿Necesitas ayuda? Contáctanos',
                     textAlign: TextAlign.center,
                     style: TextStyle(
