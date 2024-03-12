@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto/LoginPage.dart';
+import 'package:proyecto/screens/habits/CreatHabit.dart';
+import 'package:proyecto/screens/habits/CreateHabitType.dart';
 import 'dart:convert';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
 import 'package:proyecto/screens/habits/HabitItem.dart';
@@ -75,6 +77,25 @@ import 'package:proyecto/screens/users/UserProfile.dart';
                   ),
                 ),
               ),
+              ListTile(
+                title: const Text('Crear hábito'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateHabitTypeForm()),
+                    );
+                  
+                  },
+               ),
+               ListTile(
+                title: const Text('Definir hábito'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateHabit()),
+                    );
+                  },
+               ),
               ListTile(
                 title: const Text('Ver hábitos'),
                 onTap: () {
@@ -196,7 +217,7 @@ import 'package:proyecto/screens/users/UserProfile.dart';
         size: 30,
         color: Colors.white,
       ),
-      label: "VEREMOS",
+      label: "Historial",
     ),
     BottomNavigationBarItem(
       icon: Icon(

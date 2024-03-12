@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto/Frequencies.dart';
-import 'package:proyecto/HabitTypes.dart';
-import 'package:proyecto/Habits.dart';
+import 'package:proyecto/codigo/Frequencies.dart';
+import 'package:proyecto/codigo/HabitTypes.dart';
+import 'package:proyecto/codigo/Habits.dart';
 import 'package:proyecto/screens/users/UserList.dart';
 import 'package:proyecto/screens/statuses/StatusList.dart';
 

@@ -1,10 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/LoginPage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class LoginRegister extends StatelessWidget {
+class LoginRegister extends StatefulWidget {
   const LoginRegister({Key? key, required this.title}) : super(key: key);
 
   final String title;
+
+  @override
+  _LoginRegisterState createState() => _LoginRegisterState();
+}
+class _LoginRegisterState extends State<LoginRegister> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _registerUser() async {
+    final String apiUrl = 'http://127.0.0.1:8000/api/users/create';
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      body: jsonEncode(<String, String>{
+        'name': _usernameController.text,
+        'email': _emailController.text,
+        'password': _passwordController.text,
+      }),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Éxito'),
+            content: const Text('Usuario creado exitosamente.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      throw Exception('Error al registrar usuario');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +110,7 @@ class LoginRegister extends StatelessWidget {
                       ),
                       SizedBox(height: 20), // Espaciado
                       TextFormField(
+                        controller: _usernameController,
                         decoration: InputDecoration(
                           labelText: 'Usuario',
                           border: OutlineInputBorder(
@@ -72,6 +120,17 @@ class LoginRegister extends StatelessWidget {
                       ),
                       SizedBox(height: 10), // Espaciado
                       TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10), // Espaciado
+                      TextFormField(
+                        controller: _passwordController,
                         decoration: InputDecoration(
                           labelText: 'Contraseña',
                           border: OutlineInputBorder(
@@ -80,26 +139,14 @@ class LoginRegister extends StatelessWidget {
                         ),
                         obscureText: true,
                       ),
-                      SizedBox(height: 10), // Espaciado
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Confirmar Contraseña',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        obscureText: true,
-                      ),
                       SizedBox(height: 40), // Espaciado
-                      ElevatedButton(
-                        onPressed: () {
-                          // Lógica para registrarse
-                        },
+                       ElevatedButton(
+                        onPressed: _registerUser,
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.white.withOpacity(0.9), // Botón blanco semi-transparente
-                          padding: EdgeInsets.all(15), // Ajuste del padding
+                          primary: Colors.white.withOpacity(0.9),
+                          padding: const EdgeInsets.all(15),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20), // Bordes redondeados
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                         child: const Text(
@@ -129,7 +176,7 @@ class LoginRegister extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => const LoginPage(title: '',)),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           'Iniciar sesión',
                           textAlign: TextAlign.center,
                           style: TextStyle(
