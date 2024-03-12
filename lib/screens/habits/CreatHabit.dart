@@ -109,7 +109,15 @@ class _CreateHabitState extends State<CreateHabit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Habit'),
+        title: Text(
+          'Definir Hábito',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -130,13 +138,22 @@ class _CreateHabitState extends State<CreateHabit> {
                     items: snapshot.data!.map<DropdownMenuItem<String>>((dynamic habitType) {
                       return DropdownMenuItem<String>(
                         value: habitType['id'].toString(),
-                        child: Text(habitType['type']),
+                        child: Text(
+                          habitType['type'],
+                          style: TextStyle(color: Colors.blue), // Cambia el color del texto
+                        ),
                       );
                     }).toList(),
-                    hint: Text('Select Habit Type'),
+                    hint: Text(
+                      'Selecciona el Tipo de Hábito',
+                      style: TextStyle(color: Colors.blue), // Cambia el color del texto de sugerencia
+                    ),
                   );
                 } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
+                  return Text(
+                    '${snapshot.error}',
+                    style: TextStyle(color: Colors.red), // Cambia el color del texto de error
+                  );
                 }
                 return CircularProgressIndicator();
               },
@@ -156,13 +173,22 @@ class _CreateHabitState extends State<CreateHabit> {
                     items: snapshot.data!.map<DropdownMenuItem<String>>((dynamic frequency) {
                       return DropdownMenuItem<String>(
                         value: frequency['id'].toString(),
-                        child: Text(frequency['frequency']),
+                        child: Text(
+                          frequency['frequency'],
+                          style: TextStyle(color: Colors.blue), // Cambia el color del texto
+                        ),
                       );
                     }).toList(),
-                    hint: Text('Select Frequency'),
+                    hint: Text(
+                      'Selecciona la Frecuencia',
+                      style: TextStyle(color: Colors.blue), // Cambia el color del texto de sugerencia
+                    ),
                   );
                 } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
+                  return Text(
+                    '${snapshot.error}',
+                    style: TextStyle(color: Colors.red), // Cambia el color del texto de error
+                  );
                 }
                 return CircularProgressIndicator();
               },
@@ -182,13 +208,22 @@ class _CreateHabitState extends State<CreateHabit> {
                     items: snapshot.data!.map<DropdownMenuItem<String>>((dynamic status) {
                       return DropdownMenuItem<String>(
                         value: status['id'].toString(),
-                        child: Text(status['status']),
+                        child: Text(
+                          status['status'],
+                          style: TextStyle(color: Colors.blue), // Cambia el color del texto
+                        ),
                       );
                     }).toList(),
-                    hint: Text('Select Status'),
+                    hint: Text(
+                      'Selecciona el Estado',
+                      style: TextStyle(color: Colors.blue), // Cambia el color del texto de sugerencia
+                    ),
                   );
                 } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
+                  return Text(
+                    '${snapshot.error}',
+                    style: TextStyle(color: Colors.red), // Cambia el color del texto de error
+                  );
                 }
                 return CircularProgressIndicator();
               },
@@ -208,13 +243,22 @@ class _CreateHabitState extends State<CreateHabit> {
                     items: snapshot.data!.map<DropdownMenuItem<String>>((dynamic user) {
                       return DropdownMenuItem<String>(
                         value: user['id'].toString(),
-                        child: Text(user['name']),
+                        child: Text(
+                          user['name'],
+                          style: TextStyle(color: Colors.blue), // Cambia el color del texto
+                        ),
                       );
                     }).toList(),
-                    hint: Text('Select User'),
+                    hint: Text(
+                      'Selecciona el Usuario',
+                      style: TextStyle(color: Colors.blue), // Cambia el color del texto de sugerencia
+                    ),
                   );
                 } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
+                  return Text(
+                    '${snapshot.error}',
+                    style: TextStyle(color: Colors.red), // Cambia el color del texto de error
+                  );
                 }
                 return CircularProgressIndicator();
               },
@@ -222,12 +266,37 @@ class _CreateHabitState extends State<CreateHabit> {
             SizedBox(height: 16.0),
             TextFormField(
               controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: InputDecoration(
+                labelText: 'Descripción',
+                fillColor: Colors.white,
+                filled: true,
+                labelStyle: TextStyle(color: Colors.blue), // Cambia el color del texto de la etiqueta
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue), // Cambia el color del borde
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue), // Cambia el color del borde al enfocar
+                ),
+              ),
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: createHabit,
-              child: Text('Create Habit'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                padding: EdgeInsets.symmetric(vertical: 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'Crear Hábito',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),

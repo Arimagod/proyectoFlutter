@@ -17,20 +17,16 @@ class _CreateHabitTypeFormState extends State<CreateHabitTypeForm> {
         body: {'type': type},
       );
       if (response.statusCode == 200) {
-        // El tipo de hábito se creó correctamente
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Tipo de hábito creado correctamente')),
         );
-        // Limpiar el campo después de crear el tipo de hábito
         _typeController.clear();
       } else {
-        // Ocurrió un error al crear el tipo de hábito
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error al crear el tipo de hábito')),
         );
       }
     } else {
-      // No se permite crear un tipo de hábito vacío
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Por favor, introduce un tipo de hábito')),
       );
@@ -41,21 +37,58 @@ class _CreateHabitTypeFormState extends State<CreateHabitTypeForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crear Tipo de Hábito'),
+        title: Text(
+          'Crear Tipo de Hábito',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Text(
+              'Tipo de Hábito',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+            ),
+            SizedBox(height: 8.0),
             TextField(
               controller: _typeController,
-              decoration: InputDecoration(labelText: 'Tipo de Hábito'),
+              decoration: InputDecoration(
+                hintText: 'Introduce el tipo de hábito',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _createHabitType,
-              child: Text('Crear'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: Text(
+                'Crear Tipo de Hábito',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.5,
+                ),
+              ),
             ),
           ],
         ),
