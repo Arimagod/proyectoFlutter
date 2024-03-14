@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:proyecto/HomePage.dart';
 import 'dart:convert';
 import 'package:proyecto/screens/habits/HabitItem.dart';
 import 'package:proyecto/models/Habit.dart';
-
-Future<List<Habit>> fetchHabits() async {
-  final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habits'));
-
-  if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((habit) => Habit.fromJson(habit)).toList();
-  } else {
-    throw Exception('Failed to load habits');
-  }
-}
+import 'package:proyecto/screens/login/AuthService.dart';
 
 class HabitList extends StatefulWidget {
   const HabitList({Key? key}) : super(key: key);
@@ -22,10 +13,11 @@ class HabitList extends StatefulWidget {
   _HabitListState createState() => _HabitListState();
 }
 
+
 class _HabitListState extends State<HabitList> {
   late Future<List<Habit>> futureHabits;
   List<Habit> displayedHabits = [];
-
+  
   @override
   void initState() {
     super.initState();
@@ -40,6 +32,18 @@ class _HabitListState extends State<HabitList> {
     });
   }
 
+  Future<List<Habit>> fetchHabits() async {
+  final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit/user/${AuthService.userId.toString()}'));
+
+  if (response.statusCode == 200) {
+    List jsonResponse = json.decode(response.body);
+    return jsonResponse.map((habit) => Habit.fromJson(habit)).toList();
+  } else {
+    throw Exception('Failed to load habits');
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Habit>>(
@@ -48,7 +52,7 @@ class _HabitListState extends State<HabitList> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(child: Text('no tienes hábitos registrados'));
         } else if (snapshot.hasData) {
           if (displayedHabits.isEmpty) {
             displayedHabits = snapshot.data!;

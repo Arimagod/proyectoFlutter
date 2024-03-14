@@ -1,11 +1,15 @@
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:proyecto/HomePage.dart';
 import 'package:proyecto/models/Habit.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:proyecto/screens/habits/CreateHabitPage.dart';
+import 'package:proyecto/screens/login/AuthService.dart';
 
 Future<List<Habit>> fetchHabit() async {
   final response = await http.get(
-    Uri.parse('http://127.0.0.1:8000/api/habits'),
+    Uri.parse('http://127.0.0.1:8000/api/habit/user/${AuthService.userId.toString()}'),
   );
 
   if (response.statusCode == 200) {
@@ -35,14 +39,15 @@ class _HabitDetailPageState extends State<HabitDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[50], // Color de fondo gris azulado claro
+      backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        backgroundColor: Colors.blue, // Color de la barra de título azul
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
         title: const Text(
           'Hábitos',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white, // Color del texto blanco
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
@@ -53,75 +58,108 @@ class _HabitDetailPageState extends State<HabitDetail> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
-                child:  DataTable(
-                  columnSpacing: 20, // Espacio entre columnas
-                  dataRowHeight: 60, // Altura de cada fila de datos
-                  columns: const [
-                    DataColumn(
-                      label: Text(
-                        'Usuario',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                scrollDirection: Axis.horizontal,
+                child: SingleChildScrollView(
+                  child: DataTable(
+                    columnSpacing: 20,
+                    dataRowHeight: 60,
+                    columns: const [
+                      DataColumn(
+                        label: Text(
+                          'Usuario',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Tipo del Hábito',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                      DataColumn(
+                        label: Text(
+                          'Tipo del Hábito',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Frecuencia',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                      DataColumn(
+                        label: Text(
+                          'Frecuencia',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Estado',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                      DataColumn(
+                        label: Text(
+                          'Estado',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                  rows: snapshot.data!.map((habit) {
-                    return DataRow(cells: [
-                      DataCell( Text(
-                        habit.user.name,
-                        style: const TextStyle(
-                          color: Colors.black87,
+                      DataColumn(
+                        label: SizedBox(), // Espacio para el botón de editar
+                      ),
+                      DataColumn(
+                        label: SizedBox(), // Espacio para el botón de eliminar
+                      ),
+                    ],
+                    rows: snapshot.data!.map((habit) {
+                      return DataRow(cells: [
+                        DataCell(
+                          Text(
+                            habit.user.name,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                            ),
+                          ),
                         ),
-                      )),
-                      DataCell( Text(
-                        habit.habitType.type,
-                        style: const TextStyle(
-                          color: Colors.black87,
+                        DataCell(
+                          Text(
+                            habit.habitType.type,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                            ),
+                          ),
                         ),
-                      )),
-                      DataCell(Text(
-                        habit.frequency.frequency,
-                        style: const TextStyle(
-                          color: Colors.black87,
+                        DataCell(
+                          Text(
+                            habit.frequency.frequency,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                            ),
+                          ),
                         ),
-                      )),
-                      DataCell(Text(
-                        habit.status.status,
-                        style: const TextStyle(
-                          color: Colors.black87,
+                        DataCell(
+                          Text(
+                            habit.status.status,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                            ),
+                          ),
                         ),
-                      )),
-                    ]);
-                  }).toList(),
+                        DataCell(
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              // Agregar lógica para editar el hábito
+                            },
+                          ),
+                        ),
+                        DataCell(
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              // Agregar lógica para eliminar el hábito
+                            },
+                          ),
+                        ),
+                      ]);
+                    }).toList(),
+                  ),
                 ),
               );
             } else if (snapshot.hasError) {
@@ -130,6 +168,88 @@ class _HabitDetailPageState extends State<HabitDetail> {
             return CircularProgressIndicator();
           },
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.blue,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Principal",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.bookmark_added_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Historial",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.add_circle_outline,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Crear Hábito",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_outline,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Cuenta",
+          ),
+        ],
+        selectedLabelStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        selectedFontSize: 15,
+        unselectedFontSize: 15,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HabitDetail()),
+              );
+              break;
+            case 2:
+
+             Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateHabitPage()),
+              ).then((_) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              });
+              break;
+            case 3:
+              // Agregar lógica para ir a la página de perfil
+              break;
+          }
+        },
+        elevation: 0.0,
       ),
     );
   }

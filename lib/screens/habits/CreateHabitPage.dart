@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:proyecto/HomePage.dart';
+import 'package:proyecto/screens/habits/HabitDetail.dart';
+import 'package:proyecto/screens/login/AuthService.dart';
 
 class CreateHabitPage extends StatefulWidget {
   @override
@@ -23,7 +25,6 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   String? _selectedHabitType;
   String? _selectedFrequency;
   String? _selectedStatus;
-  String? _selectedUser;
 
   @override
   void initState() {
@@ -102,13 +103,12 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     if (_selectedHabitType != null &&
         _selectedFrequency != null &&
         _selectedStatus != null &&
-        _selectedUser != null &&
         _descriptionController.text.isNotEmpty) {
       final response = await http.post(
         Uri.parse('http://127.0.0.1:8000/api/habits/create'),
         body: {
           "description": _descriptionController.text,
-          "user_id": _selectedUser!,
+          "user_id": AuthService.userId.toString(),
           "habit_type_id": _selectedHabitType!,
           "frequency_id": _selectedFrequency!,
           "status_id": _selectedStatus!,
@@ -140,6 +140,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           _habitTypeCreated ? 'Definir Hábito' : 'Crear Tipo de Hábito',
           style: TextStyle(
@@ -306,40 +307,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                     },
                   ),
                   SizedBox(height: 16.0),
-                  FutureBuilder<List<dynamic>>(
-                    future: futureUsers,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return DropdownButtonFormField<String>(
-                          value: _selectedUser,
-                          onChanged: (String? value) {
-                            setState(() {
-                              _selectedUser = value!;
-                            });
-                          },
-                          items: snapshot.data!.map<DropdownMenuItem<String>>((dynamic user) {
-                            return DropdownMenuItem<String>(
-                              value: user['id'].toString(),
-                              child: Text(
-                                user['name'],
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            );
-                          }).toList(),
-                          hint: Text(
-                            'Selecciona el Usuario',
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                          '${snapshot.error}',
-                          style: TextStyle(color: Colors.red),
-                        );
-                      }
-                      return CircularProgressIndicator();
-                    },
-                  ),
+                  
                   SizedBox(height: 16.0),
                   TextFormField(
                     controller: _descriptionController,
@@ -379,6 +347,91 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
               ),
           ],
         ),
+      ),
+       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.blue,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Principal",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.bookmark_added_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Historial",
+          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.add_circle_outline,
+          //     size: 30,
+          //     color: Colors.white,
+          //   ),
+          //   label: "Crear Hábito",
+          // ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_outline,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Cuenta",
+          ),
+        ],
+        selectedLabelStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        selectedFontSize: 15,
+        unselectedFontSize: 15,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HabitDetail()),
+              );
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateHabitPage()),
+              ).then((_) {
+                // Refresh the page when returning from CreateHabitPage
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              });
+              break;
+            case 3:
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => UserProfile()),
+              // );
+              break;
+          }
+        },
+        elevation: 0.0,
       ),
     );
   }

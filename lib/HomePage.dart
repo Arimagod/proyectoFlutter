@@ -7,8 +7,13 @@ import 'package:proyecto/screens/habits/HabitDetail.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
+
+
+
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -79,7 +84,7 @@ class HomePage extends StatelessWidget {
             case 1:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HabitDetail()),
+                MaterialPageRoute(builder: (context) => const HabitDetail()),
               );
               break;
             case 2:
@@ -90,14 +95,14 @@ class HomePage extends StatelessWidget {
                 // Refresh the page when returning from CreateHabitPage
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) => const HomePage()),
                 );
               });
               break;
             case 3:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => UserProfile()),
+                MaterialPageRoute(builder: (context) => ProfilePage()),
               );
               break;
           }

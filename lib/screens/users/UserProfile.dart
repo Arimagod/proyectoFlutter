@@ -1,113 +1,119 @@
 import 'package:flutter/material.dart';
 
-class UserProfile extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Mi Perfil'),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/hola.jpeg'),
-            ),
-            SizedBox(height: 20.0),
-            ProfileDetail(label: 'Nombre', value: 'Juan Pérez'),
-            ProfileDetail(label: 'Correo electrónico', value: 'juan.perez@example.com'),
-            ProfileDetail(label: 'Teléfono', value: '+1234567890'),
-            ProfileDetail(label: 'Fecha de nacimiento', value: '01/01/1990'),
-            ProfileDetail(label: 'Género', value: 'Masculino'),
-            ProfileDetail(label: 'Dirección', value: 'Calle Principal, Ciudad, País'),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                // Mostrar ventana emergente para editar perfil
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return EditProfileDialog();
-                  },
-                );
-              },
-              child: Text('Editar Perfil'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+void main() {
+  runApp(ProfilePage());
 }
 
-class ProfileDetail extends StatelessWidget {
-  final String label;
-  final String value;
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
 
-  const ProfileDetail({
-    required this.label,
-    required this.value,
-  });
+class _ProfilePageState extends State<ProfilePage> {
+  // Simulando datos del usuario
+  String _name = "Juan Pérez";
+  String _email = "juan@example.com";
+
+  // Controladores de texto para los campos editables
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Asignar los valores iniciales a los controladores de texto
+    _nameController.text = _name;
+    _emailController.text = _email;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '$label: $value',
-          style: TextStyle(
-            fontSize: 16.0,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false, // Esto elimina el banner de debug
+      theme: ThemeData( // Configurar el tema de la aplicación
+        scaffoldBackgroundColor: Colors.white, // Establecer el color de fondo del Scaffold
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Perfil'),
+        ),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.blue.withOpacity(0.7), Colors.blue.withOpacity(0.2)],
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  'Nombre:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  enabled: false, // Desactivar edición del campo de texto
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Correo electrónico:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  enabled: false, // Desactivar edición del campo de texto
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Lógica para guardar los cambios
+                        setState(() {
+                          _name = _nameController.text;
+                          _email = _emailController.text;
+                        });
+                        // Mostrar un mensaje de éxito o realizar otras acciones necesarias
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Cambios guardados'),
+                          ),
+                        );
+                      },
+                      child: Text('Guardar'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Lógica para cancelar los cambios
+                        _nameController.text = _name;
+                        _emailController.text = _email;
+                        // Mostrar un mensaje o realizar otras acciones necesarias
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Cambios cancelados'),
+                          ),
+                        );
+                      },
+                      child: Text('Cancelar'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-        SizedBox(height: 10.0),
-      ],
-    );
-  }
-}
-
-class EditProfileDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Editar Perfil'),
-      content: Container(
-        width: MediaQuery.of(context).size.width * 0.7,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Nombre'),
-            ),
-            SizedBox(height: 10.0),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Correo electrónico'),
-            ),
-            SizedBox(height: 10.0),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Contraseña'),
-            ),
-          ],
-        ),
       ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Cancelar'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            // Acción para guardar los cambios en el perfil
-            Navigator.of(context).pop();
-          },
-          child: Text('Guardar Cambios'),
-        ),
-      ],
     );
   }
 }

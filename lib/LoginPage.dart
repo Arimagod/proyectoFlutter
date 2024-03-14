@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/screens/login/loginRegister.dart';
-import 'package:proyecto/HomePage.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

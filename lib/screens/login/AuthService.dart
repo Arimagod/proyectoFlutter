@@ -1,16 +1,20 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto/HomePage.dart';
 
 class AuthService {
+  static int userId = 0;
+
   static Future<void> login(
       BuildContext context, String email, String password) async {
     final url = Uri.parse('http://127.0.0.1:8000/api/auth/login');
 
     try {
+      if (email.isEmpty || password.isEmpty) {
+        throw 'Por favor, rellene todos los campos.';
+      }
+
       final response = await http.post(
         url,
         body: {
@@ -18,51 +22,34 @@ class AuthService {
           'password': password,
         },
       );
+
       final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
-        final accessToken = responseData['access_token'];
-        Navigator.push(
+        final userProfile = responseData['profile'];
+        userId = userProfile['id'];
+       
+        Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
+  MaterialPageRoute(builder: (context) => HomePage()),
+          (route) => false, // Remove all routes from stack
+         ) ;
+        
       } else {
         final errorMessage = responseData['response'];
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Error de inicio de sesión'),
-              content: Text(errorMessage),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     } catch (error) {
       print('Error: $error');
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Faltan datos en el formulario'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $error'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }

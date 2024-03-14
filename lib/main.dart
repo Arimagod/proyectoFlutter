@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:proyecto/MyHomePage.dart';
 import 'package:proyecto/LoginPage.dart';
-import 'package:proyecto/HomePage.dart';
 
 
 
