@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/screens/habits/CreateHabitPage.dart';
+import 'package:proyecto/screens/habits/UpdateHabitTypeForm.dart';
 import 'package:proyecto/screens/habits/HabitList.dart';
 import 'package:proyecto/screens/users/UserProfile.dart';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
@@ -7,13 +8,8 @@ import 'package:proyecto/screens/habits/HabitDetail.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
-
-
-
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -58,6 +54,15 @@ class HomePage extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(
+              Icons.edit,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Editar Hábito",
+          ),
+          
+          BottomNavigationBarItem(
+            icon: Icon(
               Icons.person_outline,
               size: 30,
               color: Colors.white,
@@ -100,6 +105,19 @@ class HomePage extends StatelessWidget {
               });
               break;
             case 3:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  UpdateHabitTypePage()),
+              ).then((_) {
+                // Refresh the page when returning from CreateHabitPage
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              });
+              break;
+            
+            case 4:
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ProfilePage()),

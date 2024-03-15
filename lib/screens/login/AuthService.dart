@@ -5,6 +5,10 @@ import 'package:proyecto/HomePage.dart';
 
 class AuthService {
   static int userId = 0;
+  static String token = '';
+  static String userEmail = '';
+  static String userPassword = '';
+  static String userName = '';
 
   static Future<void> login(
       BuildContext context, String email, String password) async {
@@ -27,6 +31,10 @@ class AuthService {
       if (response.statusCode == 200) {
         final userProfile = responseData['profile'];
         userId = userProfile['id'];
+        token = responseData['access_token'];
+        userEmail = userProfile['email'];
+        userPassword = userProfile['password'];
+        userName = userProfile['name'];
        
         Navigator.pushAndRemoveUntil(
           context,
