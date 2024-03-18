@@ -1,11 +1,11 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto/models/Habit.dart';
+import 'package:proyecto/screens/habits/CreateHabitPage.dart';
+import 'package:proyecto/screens/habits/HabitItem.dart';
 import 'package:proyecto/screens/habits/UpdateHabitPage.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
-
 
 class HabitList extends StatefulWidget {
   const HabitList({Key? key}) : super(key: key);
@@ -77,11 +77,12 @@ class _HabitListState extends State<HabitList> {
                   itemBuilder: (context, index) {
                     Habit habit = displayedHabits[index];
                     return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
-                        );
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HabitItem(id: habit.id)),
+                          );
+  
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -91,23 +92,37 @@ class _HabitListState extends State<HabitList> {
                           color: Colors.blue[50],
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              habit.habitType.type,
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                habit.habitType.type,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      
+                                      Navigator.push(
+                                      context,
+                                       MaterialPageRoute(builder: (context) => CreateHabitPage()),
+                                       );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                       ),
                     );
                   },

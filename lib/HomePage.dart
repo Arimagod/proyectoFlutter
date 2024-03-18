@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto/LoginPage.dart';
 import 'package:proyecto/screens/habits/CreateHabitPage.dart';
 import 'package:proyecto/screens/habits/UpdateHabitTypeForm.dart';
 import 'package:proyecto/screens/habits/HabitList.dart';
@@ -30,11 +31,11 @@ class HomePage extends StatelessWidget {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.home_outlined,
+              Icons.logout,
               size: 30,
               color: Colors.white,
             ),
-            label: "Principal",
+            label: "Cerrar Sesión",
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -44,21 +45,14 @@ class HomePage extends StatelessWidget {
             ),
             label: "Historial",
           ),
+          
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.add_circle_outline,
+              Icons.edit_attributes,
               size: 30,
               color: Colors.white,
             ),
-            label: "Crear Hábito",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.edit,
-              size: 30,
-              color: Colors.white,
-            ),
-            label: "Editar Hábito",
+            label: "Editar Tipo/Hábito",
           ),
           
           BottomNavigationBarItem(
@@ -85,6 +79,10 @@ class HomePage extends StatelessWidget {
         onTap: (int index) {
           switch (index) {
             case 0:
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage(title: "",)),
+              );
               break;
             case 1:
               Navigator.push(
@@ -92,19 +90,8 @@ class HomePage extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const HabitDetail()),
               );
               break;
+            
             case 2:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CreateHabitPage()),
-              ).then((_) {
-                // Refresh the page when returning from CreateHabitPage
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
-              });
-              break;
-            case 3:
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) =>  UpdateHabitTypePage()),
@@ -117,7 +104,7 @@ class HomePage extends StatelessWidget {
               });
               break;
             
-            case 4:
+            case 3:
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ProfilePage()),

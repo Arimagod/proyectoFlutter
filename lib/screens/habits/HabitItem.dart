@@ -7,7 +7,7 @@ import 'dart:convert';
 
 
 class HabitItem extends StatefulWidget {
-  const HabitItem({super.key,required this.id});
+  const HabitItem({Key? key, required this.id}) : super(key: key);
   final int id;
   @override
   State<HabitItem> createState() => _HabitItemState();

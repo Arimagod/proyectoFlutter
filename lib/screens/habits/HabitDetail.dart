@@ -3,9 +3,8 @@ import 'package:proyecto/HomePage.dart';
 import 'package:proyecto/models/Habit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'package:proyecto/screens/habits/CreateHabitPage.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
+import 'package:proyecto/screens/users/UserProfile.dart';
 
 Future<List<Habit>> fetchHabit() async {
   final response = await http.get(
@@ -84,6 +83,15 @@ class _HabitDetailPageState extends State<HabitDetail> {
                       ),
                       DataColumn(
                         label: Text(
+                          'Descripción',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
                           'Frecuencia',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -104,21 +112,44 @@ class _HabitDetailPageState extends State<HabitDetail> {
                     rows: snapshot.data!.map((habit) {
                       return DataRow(cells: [
                         DataCell(
-                          Text(
-                            habit.user.name,
-                            style: const TextStyle(
-                              color: Colors.black87,
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: 150, // Define your maximum width here
+                            ),
+                            child: Text(
+                              habit.user.name,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
                         ),
                         DataCell(
-                          Text(
-                            habit.habitType.type,
-                            style: const TextStyle(
-                              color: Colors.black87,
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: 150, // Define your maximum width here
+                            ),
+                            child: Text(
+                              habit.habitType.type,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
                         ),
+                        DataCell(
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: 100, // Define your maximum width here
+                              ),
+                              child: Text(
+                                habit.description,
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ),
                         DataCell(
                           Text(
                             habit.frequency.frequency,
@@ -167,14 +198,7 @@ class _HabitDetailPageState extends State<HabitDetail> {
             ),
             label: "Historial",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.add_circle_outline,
-              size: 30,
-              color: Colors.white,
-            ),
-            label: "Crear Hábito",
-          ),
+          
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person_outline,
@@ -210,20 +234,12 @@ class _HabitDetailPageState extends State<HabitDetail> {
                 MaterialPageRoute(builder: (context) => HabitDetail()),
               );
               break;
+            
             case 2:
-
-             Navigator.push(
+              Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CreateHabitPage()),
-              ).then((_) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-              });
-              break;
-            case 3:
-              // Agregar lógica para ir a la página de perfil
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
               break;
           }
         },

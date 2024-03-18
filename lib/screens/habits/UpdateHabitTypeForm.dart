@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:proyecto/HomePage.dart';
+import 'package:proyecto/screens/habits/CreateHabitPage.dart';
+import 'package:proyecto/screens/habits/HabitDetail.dart';
+import 'package:proyecto/screens/users/UserProfile.dart';
+
 class UpdateHabitTypePage extends StatefulWidget {
   @override
   _UpdateHabitTypePageState createState() => _UpdateHabitTypePageState();
@@ -64,7 +69,16 @@ class _UpdateHabitTypePageState extends State<UpdateHabitTypePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Actualizar Tipo de Hábito'),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Actualizar Tipo de Hábito',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -127,6 +141,73 @@ class _UpdateHabitTypePageState extends State<UpdateHabitTypePage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.blue,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Principal",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.bookmark_added_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Historial",
+          ),
+          
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_outline,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Cuenta",
+          ),
+        ],
+        selectedLabelStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        selectedFontSize: 15,
+        unselectedFontSize: 15,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+              break;
+
+            case 1:
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HabitDetail()),
+              );
+
+            break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );              break;
+          }
+        },
+        elevation: 0.0,
       ),
     );
   }
