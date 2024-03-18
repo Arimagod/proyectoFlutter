@@ -52,7 +52,7 @@ class _HabitDetailPageState extends State<HabitDetail> {
         ),
         centerTitle: true,
       ),
-      body: Center(
+      body: Container(
         child: FutureBuilder<List<Habit>>(
           future: futureHabit,
           builder: (context, snapshot) {
@@ -100,12 +100,6 @@ class _HabitDetailPageState extends State<HabitDetail> {
                           ),
                         ),
                       ),
-                      DataColumn(
-                        label: SizedBox(), // Espacio para el botón de editar
-                      ),
-                      DataColumn(
-                        label: SizedBox(), // Espacio para el botón de eliminar
-                      ),
                     ],
                     rows: snapshot.data!.map((habit) {
                       return DataRow(cells: [
@@ -139,22 +133,6 @@ class _HabitDetailPageState extends State<HabitDetail> {
                             style: const TextStyle(
                               color: Colors.black87,
                             ),
-                          ),
-                        ),
-                        DataCell(
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              // Agregar lógica para editar el hábito
-                            },
-                          ),
-                        ),
-                        DataCell(
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              // Agregar lógica para eliminar el hábito
-                            },
                           ),
                         ),
                       ]);

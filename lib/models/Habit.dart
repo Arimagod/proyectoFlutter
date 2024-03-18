@@ -20,6 +20,7 @@ class Habit {
     required this.frequency,
     required this.habitType,
   });
+  
 
   factory Habit.fromJson(Map<String, dynamic> json){
     return Habit(

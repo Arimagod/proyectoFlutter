@@ -1,9 +1,11 @@
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:proyecto/screens/habits/HabitItem.dart';
 import 'package:proyecto/models/Habit.dart';
+import 'package:proyecto/screens/habits/UpdateHabitPage.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
+
 
 class HabitList extends StatefulWidget {
   const HabitList({Key? key}) : super(key: key);
@@ -12,11 +14,10 @@ class HabitList extends StatefulWidget {
   _HabitListState createState() => _HabitListState();
 }
 
-
 class _HabitListState extends State<HabitList> {
   late Future<List<Habit>> futureHabits;
   List<Habit> displayedHabits = [];
-  
+
   @override
   void initState() {
     super.initState();
@@ -32,16 +33,15 @@ class _HabitListState extends State<HabitList> {
   }
 
   Future<List<Habit>> fetchHabits() async {
-  final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit/user/${AuthService.userId.toString()}'));
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit/user/${AuthService.userId.toString()}'));
 
-  if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((habit) => Habit.fromJson(habit)).toList();
-  } else {
-    throw Exception('Failed to load habits');
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((habit) => Habit.fromJson(habit)).toList();
+    } else {
+      throw Exception('Failed to load habits');
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class _HabitListState extends State<HabitList> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text('no tienes hábitos registrados'));
+          return Center(child: Text('No tienes hábitos registrados'));
         } else if (snapshot.hasData) {
           if (displayedHabits.isEmpty) {
             displayedHabits = snapshot.data!;
@@ -80,7 +80,7 @@ class _HabitListState extends State<HabitList> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HabitItem(id: habit.id)),
+                          MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
                         );
                       },
                       child: Container(
@@ -90,9 +90,23 @@ class _HabitListState extends State<HabitList> {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.blue[50],
                         ),
-                        child: Text(
-                          habit.habitType.type,
-                          style: TextStyle(fontSize: 18),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              habit.habitType.type,
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     );
