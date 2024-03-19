@@ -36,7 +36,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   }
 
   Future<List<dynamic>> fetchHabitTypes() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit_types'));
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit/habitType/${AuthService.userId.toString()}'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -72,32 +72,35 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   }
 
   Future<void> _createHabitType() async {
-    final String type = _typeController.text.trim();
-    if (type.isNotEmpty) {
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/habit_types/create'),
-        body: {'type': type},
+  final String type = _typeController.text.trim();
+  if (type.isNotEmpty) {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:8000/api/habit_types/create'),
+      body: {
+        'type': type,
+        'user_id': AuthService.userId.toString(), // Incluir el user_id aquí
+      },
+    );
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Tipo de hábito creado correctamente')),
       );
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Tipo de hábito creado correctamente')),
-        );
-        setState(() {
-          _habitTypeCreated = true;
-        });
-        _typeController.clear();
-        futureHabitTypes = fetchHabitTypes();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al crear el tipo de hábito')),
-        );
-      }
+      setState(() {
+        _habitTypeCreated = true;
+      });
+      _typeController.clear();
+      futureHabitTypes = fetchHabitTypes();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Por favor, introduce un tipo de hábito')),
+        SnackBar(content: Text('Error al crear el tipo de hábito')),
       );
     }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Por favor, introduce un tipo de hábito')),
+    );
   }
+}
 
   Future<void> _createHabit() async {
     if (_selectedHabitType != null &&
@@ -348,91 +351,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
           ],
         ),
       ),
-       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.blue,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-              size: 30,
-              color: Colors.white,
-            ),
-            label: "Principal",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.bookmark_added_outlined,
-              size: 30,
-              color: Colors.white,
-            ),
-            label: "Historial",
-          ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(
-          //     Icons.add_circle_outline,
-          //     size: 30,
-          //     color: Colors.white,
-          //   ),
-          //   label: "Crear Hábito",
-          // ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_outline,
-              size: 30,
-              color: Colors.white,
-            ),
-            label: "Cuenta",
-          ),
-        ],
-        selectedLabelStyle: const TextStyle(
-          fontSize: 14,
-          color: Colors.white,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 14,
-          color: Colors.white,
-        ),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-        selectedFontSize: 15,
-        unselectedFontSize: 15,
-        onTap: (int index) {
-          switch (index) {
-            case 0:
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-              break;
-            case 1:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HabitDetail()),
-              );
-              break;
-            case 2:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CreateHabitPage()),
-              ).then((_) {
-                // Refresh the page when returning from CreateHabitPage
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
-              });
-              break;
-            case 3:
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => UserProfile()),
-              // );
-              break;
-          }
-        },
-        elevation: 0.0,
-      ),
+       
     );
   }
 }

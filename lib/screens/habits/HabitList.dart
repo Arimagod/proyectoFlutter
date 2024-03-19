@@ -28,6 +28,7 @@ class _HabitListState extends State<HabitList> {
     setState(() {
       displayedHabits = habits
           .where((habit) => habit.habitType.type.toLowerCase().contains(text.toLowerCase()))
+          
           .toList();
     });
   }
@@ -107,16 +108,6 @@ class _HabitListState extends State<HabitList> {
                                         context,
                                         MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
                                       );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.add),
-                                    onPressed: () {
-                                      
-                                      Navigator.push(
-                                      context,
-                                       MaterialPageRoute(builder: (context) => CreateHabitPage()),
-                                       );
                                     },
                                   ),
                                 ],

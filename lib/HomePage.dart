@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/LoginPage.dart';
 import 'package:proyecto/screens/habits/CreateHabitPage.dart';
+import 'package:proyecto/screens/habits/CreateHabitType.dart';
 import 'package:proyecto/screens/habits/UpdateHabitTypeForm.dart';
 import 'package:proyecto/screens/habits/HabitList.dart';
 import 'package:proyecto/screens/users/UserProfile.dart';
@@ -25,6 +26,17 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: HabitList(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  CreateHabitPage()),
+              );
+        },
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: Colors.blue,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.blue,
