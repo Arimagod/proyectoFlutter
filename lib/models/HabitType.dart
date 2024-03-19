@@ -1,28 +1,21 @@
-class HabitType{
+import 'package:proyecto/models/User.dart';
+
+class HabitType {
   final int id;
   final String type;
-  final int user_id;
+  final User user;
 
-
-  const HabitType({
-    required this.id,
-    required this.type,
-    required this.user_id,
+  HabitType({
+    required this.id, 
+    required this.type, 
+    required this.user,
   });
 
-  factory HabitType.fromJson(Map<String, dynamic> json){
-    return switch(json){{
-      'id': int id,
-      'type': String type,
-      'user_id': int user_id,
-    }=> 
-    HabitType(
-      id: id,
-      type: type,
-      user_id: user_id,
-    ),
-    _=> throw const FormatException('Fallo al cargar modelo'),
-    };
+  factory HabitType.fromJson(Map<String, dynamic> json) {
+    return HabitType(
+      id: json['id'],
+      type: json['type'],
+      user: User.fromJson(json['user']),
+    );
   }
-
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto/HomePage.dart';
+import 'package:proyecto/models/Habit.dart';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
 
@@ -196,10 +197,9 @@ class _ProfilePageState extends State<ProfilePage> {
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
+              case 0:
+                Navigator.pop(context);
+                break;
               break;
             case 1:
               Navigator.push(

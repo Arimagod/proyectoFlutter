@@ -281,10 +281,10 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => HomePage()),
+              // );
               break;
             case 1:
               Navigator.push(

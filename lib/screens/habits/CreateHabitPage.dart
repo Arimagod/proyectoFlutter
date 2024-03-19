@@ -36,7 +36,8 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   }
 
   Future<List<dynamic>> fetchHabitTypes() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit/habitType/${AuthService.userId.toString()}'));
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit_type/habitTypeUser/${AuthService.userId.toString()}'));
+
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {

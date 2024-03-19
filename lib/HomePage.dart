@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/LoginPage.dart';
+import 'package:proyecto/screens/habit_types/HabitTypeList.dart';
 import 'package:proyecto/screens/habits/CreateHabitPage.dart';
 import 'package:proyecto/screens/habits/CreateHabitType.dart';
 import 'package:proyecto/screens/habits/UpdateHabitTypeForm.dart';
@@ -25,7 +26,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      body: HabitList(),
+      body: HabitTypeList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
