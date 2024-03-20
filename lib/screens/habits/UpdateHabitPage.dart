@@ -7,6 +7,7 @@ import 'package:proyecto/models/Habit.dart';
 import 'package:proyecto/screens/habits/CreateHabitPage.dart';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
+import 'package:proyecto/screens/users/UserProfile.dart';
 
 class UpdateHabitPage extends StatefulWidget {
   final Habit habit;
@@ -20,6 +21,7 @@ class UpdateHabitPage extends StatefulWidget {
 class _UpdateHabitPageState extends State<UpdateHabitPage> {
   late String _newStatusId;
   late String _newFrequencyId;
+  TextEditingController _newDescriptionController = TextEditingController(); // Controlador para el nuevo campo de texto de descripción
   List<dynamic>? _statusOptions;
   List<dynamic>? _frequencyOptions;
 
@@ -32,6 +34,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
     _newFrequencyId = widget.habit.frequency.id.toString();
     _getStatusOptions();
     _getFrequencyOptions();
+    _newDescriptionController.text = widget.habit.description; // Establece la descripción actual como valor inicial del nuevo campo de texto
   }
 
   Future<void> _getStatusOptions() async {
@@ -53,31 +56,31 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
   }
 
   Future<void> updateHabit() async {
-  if (_formKey.currentState!.validate()) {
-    String userId = AuthService.userId.toString(); // Asegúrate de tener un método para obtener el userId en AuthService
-    final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/api/habits/update'),
-      body: {
-        "id": widget.habit.id.toString(),
-        "description": widget.habit.description, // Asegúrate de que Habit tiene un campo description
-        "user_id": userId,
-        "habit_type_id": widget.habit.habitType.id.toString(), // Asegúrate de que HabitType tiene un campo id
-        "frequency_id": _newFrequencyId.toString(),
-        "status_id": _newStatusId.toString(),
-      },
-    );
+    if (_formKey.currentState!.validate()) {
+      String userId = AuthService.userId.toString();
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/api/habits/update'),
+        body: {
+          "id": widget.habit.id.toString(),
+          "description": _newDescriptionController.text, // Utiliza el valor del nuevo campo de texto para la descripción
+          "user_id": userId,
+          "habit_type_id": widget.habit.habitType.id.toString(),
+          "frequency_id": _newFrequencyId.toString(),
+          "status_id": _newStatusId.toString(),
+        },
+      );
 
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Hábito actualizado exitosamente')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al actualizar el hábito')),
-      );
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Hábito actualizado exitosamente')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al actualizar el hábito')),
+        );
+      }
     }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +108,20 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
               Text(
                 'Frecuencia actual: ${widget.habit.frequency.frequency}',
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                'Nueva descripción:',
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              ),
+              TextFormField(
+                controller: _newDescriptionController, // Asigna el controlador al campo de texto
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor ingresa una descripción';
+                  }
+                  return null;
+                },
               ),
               SizedBox(height: 20.0),
               Text(
@@ -189,14 +206,6 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.add_circle_outline,
-              size: 30,
-              color: Colors.white,
-            ),
-            label: "Crear Hábito",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
               Icons.person_outline,
               size: 30,
               color: Colors.white,
@@ -231,25 +240,15 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
               );
               break;
             case 2:
-
-             Navigator.push(
+              Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CreateHabitPage()),
-              ).then((_) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-              });
-              break;
-            case 3:
-              // Agregar lógica para ir a la página de perfil
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
               break;
           }
         },
         elevation: 0.0,
       ),
     );
-    
   }
 }

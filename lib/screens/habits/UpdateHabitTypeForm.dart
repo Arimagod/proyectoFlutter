@@ -189,28 +189,30 @@ class _UpdateHabitTypePageState extends State<UpdateHabitTypePage> {
         onTap: (int index) {
           switch (index) {
             case 0:
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => HomePage()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
               break;
-
             case 1:
-            Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => HabitDetail()),
               );
-
-            break;
+              break;
+            
             case 2:
-              Navigator.push(
+            Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ProfilePage()),
-              );              break;
+              );
+
+              break;
           }
         },
         elevation: 0.0,
       ),
+      
     );
   }
 }

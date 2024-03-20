@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:proyecto/HomePage.dart';
+import 'package:proyecto/LoginPage.dart';
+import 'package:proyecto/screens/habits/HabitDetail.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -62,6 +65,35 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     }
+  }
+  void _logout() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Cerrar sesión'),
+          content: Text('¿Estás seguro de que quieres cerrar sesión?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Sí'),
+              onPressed: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage(title: '',)),
+              );
+                // AuthService.logout(); // Descomenta esta línea si tienes un método de cierre de sesión en AuthService.
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -144,10 +176,85 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Token de acceso: ${AuthService.token}',
                     style: TextStyle(fontSize: 16),
                   ),
+                   ElevatedButton(
+                  onPressed: _logout,
+                  child: Text('Cerrar sesión'),
+                ),
               ],
             ),
+            
           ),
+          
         ),
+        
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.blue,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Principal",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.bookmark_added_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Historial",
+          ),
+          
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_outline,
+              size: 30,
+              color: Colors.white,
+            ),
+            label: "Cuenta",
+          ),
+        ],
+        selectedLabelStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        selectedFontSize: 15,
+        unselectedFontSize: 15,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HabitDetail()),
+              );
+              break;
+            
+            case 2:
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+
+              break;
+          }
+        },
+        elevation: 0.0,
       ),
     );
   }

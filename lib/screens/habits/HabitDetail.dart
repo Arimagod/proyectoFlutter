@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:proyecto/screens/habits/CreateHabitPage.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
+import 'package:proyecto/screens/users/UserProfile.dart';
 
 Future<List<Habit>> fetchHabit() async {
   final response = await http.get(
@@ -223,7 +224,11 @@ class _HabitDetailPageState extends State<HabitDetail> {
               });
               break;
             case 3:
-              // Agregar lógica para ir a la página de perfil
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+
               break;
           }
         },
