@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:proyecto/HomePage.dart';
-import 'package:proyecto/screens/habits/CreateHabitPage.dart';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
 import 'package:proyecto/screens/users/UserProfile.dart';

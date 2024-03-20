@@ -54,11 +54,11 @@ class HomePage extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.edit,
+              Icons.edit_document,
               size: 30,
               color: Colors.white,
             ),
-            label: "Editar Hábito",
+            label: "Editar nombre de hábito",
           ),
           
           BottomNavigationBarItem(

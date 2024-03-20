@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto/HomePage.dart';
 import 'package:proyecto/models/Habit.dart';
-import 'package:proyecto/screens/habits/CreateHabitPage.dart';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
 import 'package:proyecto/screens/users/UserProfile.dart';
@@ -21,7 +20,7 @@ class UpdateHabitPage extends StatefulWidget {
 class _UpdateHabitPageState extends State<UpdateHabitPage> {
   late String _newStatusId;
   late String _newFrequencyId;
-  TextEditingController _newDescriptionController = TextEditingController(); // Controlador para el nuevo campo de texto de descripción
+  TextEditingController _newDescriptionController = TextEditingController();
   List<dynamic>? _statusOptions;
   List<dynamic>? _frequencyOptions;
 
@@ -34,7 +33,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
     _newFrequencyId = widget.habit.frequency.id.toString();
     _getStatusOptions();
     _getFrequencyOptions();
-    _newDescriptionController.text = widget.habit.description; // Establece la descripción actual como valor inicial del nuevo campo de texto
+    _newDescriptionController.text = widget.habit.description;
   }
 
   Future<void> _getStatusOptions() async {
@@ -62,7 +61,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
         Uri.parse('http://127.0.0.1:8000/api/habits/update'),
         body: {
           "id": widget.habit.id.toString(),
-          "description": _newDescriptionController.text, // Utiliza el valor del nuevo campo de texto para la descripción
+          "description": _newDescriptionController.text,
           "user_id": userId,
           "habit_type_id": widget.habit.habitType.id.toString(),
           "frequency_id": _newFrequencyId.toString(),
@@ -86,101 +85,123 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Actualizar Hábito'),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Actualizar Hábito',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Nombre del Hábito: ${widget.habit.habitType.type}',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Nombre del Hábito: ${widget.habit.habitType.type}',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    'Estado actual: ${widget.habit.status.status}',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    'Frecuencia actual: ${widget.habit.frequency.frequency}',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _newDescriptionController,
+                    decoration: InputDecoration(
+                      labelText: 'Nueva descripción',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor ingresa una descripción';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  DropdownButtonFormField<String>(
+                    value: _newStatusId,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _newStatusId = newValue!;
+                      });
+                    },
+                    items: _statusOptions?.map<DropdownMenuItem<String>>((dynamic status) {
+                          return DropdownMenuItem<String>(
+                            value: status['id'].toString(),
+                            child: Text(status['status']),
+                          );
+                        }).toList() ??
+                        [],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor selecciona un estado';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  DropdownButtonFormField<String>(
+                    value: _newFrequencyId,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _newFrequencyId = newValue!;
+                      });
+                    },
+                    items: _frequencyOptions?.map<DropdownMenuItem<String>>((dynamic frequency) {
+                          return DropdownMenuItem<String>(
+                            value: frequency['id'].toString(),
+                            child: Text(frequency['frequency']),
+                          );
+                        }).toList() ??
+                        [],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor selecciona una frecuencia';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: updateHabit,
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue.withOpacity(0.6),
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    child: Text(
+                      'Actualizar Hábito',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20.0),
-              Text(
-                'Estado actual: ${widget.habit.status.status}',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                'Frecuencia actual: ${widget.habit.frequency.frequency}',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                'Nueva descripción:',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              ),
-              TextFormField(
-                controller: _newDescriptionController, // Asigna el controlador al campo de texto
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor ingresa una descripción';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                'Nuevo estado:',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              ),
-              DropdownButtonFormField<String>(
-                value: _newStatusId,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _newStatusId = newValue!;
-                  });
-                },
-                items: _statusOptions?.map<DropdownMenuItem<String>>((dynamic status) {
-                      return DropdownMenuItem<String>(
-                        value: status['id'].toString(),
-                        child: Text(status['status']),
-                      );
-                    }).toList() ??
-                    [],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor selecciona un estado';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                'Nueva frecuencia:',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              ),
-              DropdownButtonFormField<String>(
-                value: _newFrequencyId,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _newFrequencyId = newValue!;
-                  });
-                },
-                items: _frequencyOptions?.map<DropdownMenuItem<String>>((dynamic frequency) {
-                      return DropdownMenuItem<String>(
-                        value: frequency['id'].toString(),
-                        child: Text(frequency['frequency']),
-                      );
-                    }).toList() ??
-                    [],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor selecciona una frecuencia';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: updateHabit,
-                child: Text('Actualizar Hábito'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
