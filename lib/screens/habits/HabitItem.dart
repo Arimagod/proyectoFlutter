@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:proyecto/models/Habit.dart';
 import 'dart:convert';
 
-
-
-
 class HabitItem extends StatefulWidget {
   const HabitItem({Key? key, required this.id}) : super(key: key);
   final int id;

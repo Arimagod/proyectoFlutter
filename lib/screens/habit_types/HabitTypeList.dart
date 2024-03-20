@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:proyecto/models/Habit.dart';
 import 'package:proyecto/models/HabitType.dart'; // Importa tu modelo de tipo de hábito
 import 'package:proyecto/screens/habits/HabitItem.dart';
 import 'package:proyecto/screens/habits/UpdateHabitPage.dart';
@@ -75,14 +76,14 @@ class _HabitTypeListState extends State<HabitTypeList> {
                 child: ListView.builder(
                   itemCount: displayedHabitTypes.length,
                   itemBuilder: (context, index) {
-                    HabitType habitType = displayedHabitTypes[index];
+                    HabitType habitType = displayedHabitTypes[index] ;
                     return InkWell(
-                      onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(builder: (context) => HabitItem(id: habit.id)),
-                        //   );
-                        // Aquí puedes agregar la navegación para ver los detalles del tipo de hábito si lo deseas
+                        onTap: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => HabitItem()),
+                          // );
+  
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -92,27 +93,27 @@ class _HabitTypeListState extends State<HabitTypeList> {
                           color: Colors.blue[50],
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              habitType.type,
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(builder: (context) => UpdateHabitPage(habitTypeList: habitTypeList)),
-                                    //   );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                habitType.type,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    onPressed: () {
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
+                                      // );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                       ),
                     );
                   },

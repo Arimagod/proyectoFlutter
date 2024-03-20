@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:proyecto/HomePage.dart';
 import 'package:proyecto/screens/habits/CreateHabitPage.dart';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
+import 'package:proyecto/screens/login/AuthService.dart';
 import 'package:proyecto/screens/users/UserProfile.dart';
 
 class UpdateHabitTypePage extends StatefulWidget {
@@ -24,7 +25,7 @@ class _UpdateHabitTypePageState extends State<UpdateHabitTypePage> {
   }
 
   Future<void> _fetchHabitTypes() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit_types'));
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit_type/habitTypeUser/${AuthService.userId.toString()}'));
     if (response.statusCode == 200) {
       setState(() {
         _habitTypes = jsonDecode(response.body);
@@ -37,33 +38,34 @@ class _UpdateHabitTypePageState extends State<UpdateHabitTypePage> {
   }
 
   Future<void> _updateHabitType() async {
-    final String newType = _newTypeController.text.trim();
-    if (_selectedHabitType != null && newType.isNotEmpty) {
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/habit_types/update'),
-        body: {
-          'id': _selectedHabitType!,
-          'type': newType,
-        },
+  final String newType = _newTypeController.text.trim();
+  if (_selectedHabitType != null && newType.isNotEmpty) {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:8000/api/habit_types/update'),
+      body: {
+        'id': _selectedHabitType!,
+        'type': newType,
+        'user_id': AuthService.userId.toString(),
+      },
+    );
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Tipo de hábito actualizado correctamente')),
       );
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Tipo de hábito actualizado correctamente')),
-        );
-        _newTypeController.clear();
-        _selectedHabitType = null;
-        _fetchHabitTypes();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al actualizar el tipo de hábito')),
-        );
-      }
+      _newTypeController.clear();
+      _selectedHabitType = null;
+      _fetchHabitTypes();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Por favor, selecciona un tipo de hábito y proporciona un nuevo valor')),
+        SnackBar(content: Text('Error al actualizar el tipo de hábito')),
       );
     }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Por favor, selecciona un tipo de hábito y proporciona un nuevo valor')),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {

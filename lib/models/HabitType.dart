@@ -18,4 +18,5 @@ class HabitType {
       user: User.fromJson(json['user']),
     );
   }
+
 }

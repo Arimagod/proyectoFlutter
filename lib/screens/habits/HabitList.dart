@@ -33,7 +33,7 @@ class _HabitListState extends State<HabitList> {
   }
 
   Future<List<Habit>> fetchHabits() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit_type/habitTypeUser/${AuthService.userId.toString()}'));
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit/habitType/${AuthService.userId.toString()}'));
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
