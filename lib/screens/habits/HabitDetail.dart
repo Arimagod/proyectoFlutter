@@ -142,7 +142,7 @@ class _HabitDetailPageState extends State<HabitDetail> {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
+              return Text('No tienes un historial aun');
             }
             return CircularProgressIndicator();
           },

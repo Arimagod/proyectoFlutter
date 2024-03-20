@@ -7,7 +7,6 @@ class AuthService {
   static int userId = 0;
   static String token = '';
   static String userEmail = '';
-  static String userPassword = '';
   static String userName = '';
 
   static Future<void> login(
@@ -33,7 +32,6 @@ class AuthService {
         userId = userProfile['id'];
         token = responseData['access_token'];
         userEmail = userProfile['email'];
-        userPassword = userProfile['password'];
         userName = userProfile['name'];
        
         Navigator.pushAndRemoveUntil(
