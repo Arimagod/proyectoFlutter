@@ -77,38 +77,38 @@ class _HabitListState extends State<HabitList> {
                   itemCount: displayedHabits.length,
                   itemBuilder: (context, index) {
                     Habit habit = displayedHabits[index];
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue[50],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => HabitItem(id: habit.id)),
-                              );
-                            },
-                            child: Text(
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HabitItem(id: habit.id)),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blue[50],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
                               habit.habitType.type,
                               style: TextStyle(fontSize: 18),
                             ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
-                              );
-                            },
-                          ),
-                        ],
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
