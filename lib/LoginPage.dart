@@ -50,7 +50,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: Container(
+
+      body: SingleChildScrollView(child: 
+      Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         decoration:  BoxDecoration(
           gradient: LinearGradient(
@@ -198,6 +202,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+      ),
+      
     );
   }
 }

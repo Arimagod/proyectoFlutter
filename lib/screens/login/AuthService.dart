@@ -11,7 +11,7 @@ class AuthService {
 
   static Future<void> login(
       BuildContext context, String email, String password) async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/auth/login');
+    final url = Uri.parse('https://marin.terrabyteco.com/api/auth/login');
 
     try {
       if (email.isEmpty || password.isEmpty) {

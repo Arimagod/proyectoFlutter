@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _updateProfile() async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/users/update/${AuthService.userId}');
+    final url = Uri.parse('https://marin.terrabyteco.com/api/users/update/${AuthService.userId}');
 
     try {
       final response = await http.put(

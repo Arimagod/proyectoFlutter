@@ -10,7 +10,7 @@ import 'package:proyecto/screens/users/UserProfile.dart';
 
 Future<List<Habit>> fetchHabit() async {
   final response = await http.get(
-    Uri.parse('http://127.0.0.1:8000/api/habit/user/${AuthService.userId.toString()}'),
+    Uri.parse('https://marin.terrabyteco.com/api/habit/user/${AuthService.userId.toString()}'),
   );
 
   if (response.statusCode == 200) {

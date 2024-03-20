@@ -24,7 +24,7 @@ class _UpdateHabitTypePageState extends State<UpdateHabitTypePage> {
   }
 
   Future<void> _fetchHabitTypes() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit_type/habitTypeUser/${AuthService.userId.toString()}'));
+    final response = await http.get(Uri.parse('https://marin.terrabyteco.com/api/habit_type/habitTypeUser/${AuthService.userId.toString()}'));
     if (response.statusCode == 200) {
       setState(() {
         _habitTypes = jsonDecode(response.body);
@@ -40,7 +40,7 @@ class _UpdateHabitTypePageState extends State<UpdateHabitTypePage> {
   final String newType = _newTypeController.text.trim();
   if (_selectedHabitType != null && newType.isNotEmpty) {
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/api/habit_types/update'),
+      Uri.parse('https://marin.terrabyteco.com/api/habit_types/update'),
       body: {
         'id': _selectedHabitType!,
         'type': newType,

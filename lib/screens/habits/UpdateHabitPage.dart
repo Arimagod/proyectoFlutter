@@ -37,7 +37,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
   }
 
   Future<void> _getStatusOptions() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/statuses'));
+    final response = await http.get(Uri.parse('https://marin.terrabyteco.com/api/statuses'));
     if (response.statusCode == 200) {
       setState(() {
         _statusOptions = jsonDecode(response.body);
@@ -46,7 +46,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
   }
 
   Future<void> _getFrequencyOptions() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/frequencies'));
+    final response = await http.get(Uri.parse('https://marin.terrabyteco.com/api/frequencies'));
     if (response.statusCode == 200) {
       setState(() {
         _frequencyOptions = jsonDecode(response.body);
@@ -58,7 +58,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
     if (_formKey.currentState!.validate()) {
       String userId = AuthService.userId.toString();
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/habits/update'),
+        Uri.parse('https://marin.terrabyteco.com/api/habits/update'),
         body: {
           "id": widget.habit.id.toString(),
           "description": _newDescriptionController.text,

@@ -17,7 +17,7 @@ class _LoginRegisterState extends State<LoginRegister> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _registerUser() async {
-    final String apiUrl = 'http://127.0.0.1:8000/api/users/create';
+    final String apiUrl = 'https://marin.terrabyteco.com/api/users/create';
     final response = await http.post(
       Uri.parse(apiUrl),
       body: jsonEncode(<String, String>{
@@ -57,7 +57,9 @@ class _LoginRegisterState extends State<LoginRegister> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true, // Extiende el fondo detrás del AppBar
-      body: Container(
+      body: SingleChildScrollView(child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         padding: const EdgeInsets.symmetric(horizontal: 20), // Ajuste del padding horizontal
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -88,8 +90,8 @@ class _LoginRegisterState extends State<LoginRegister> {
                 ),
               ),
               SizedBox(height: 20), // Espaciado
-              Expanded(
-                child: Container(
+              
+                   Container(
                   margin: EdgeInsets.only(top: 90), // Ajuste del margen superior
                   padding: EdgeInsets.fromLTRB(30, 0, 30, 30), // Ajuste del padding del contenedor blanco
                   decoration: BoxDecoration(
@@ -189,11 +191,12 @@ class _LoginRegisterState extends State<LoginRegister> {
                     ],
                   ),
                 ),
-              ),
+              
             ],
           ),
         ),
-      ),
+      ),)
+      
     );
   }
 }

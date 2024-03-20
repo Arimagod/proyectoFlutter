@@ -24,7 +24,7 @@ class _HabitItemState extends State<HabitItem> {
   }
   Future<Habit> fetchUser() async {
   final response = await http.get(
-      Uri.parse('http://127.0.0.1:8000/api/habits/${widget.id}'),
+      Uri.parse('https://marin.terrabyteco.com/api/habits/${widget.id}'),
     );
 
 

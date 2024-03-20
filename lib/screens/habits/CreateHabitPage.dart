@@ -37,7 +37,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   }
 
   Future<List<dynamic>> fetchHabitTypes() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/habit_type/habitTypeUser/${AuthService.userId.toString()}'));
+    final response = await http.get(Uri.parse('https://marin.terrabyteco.com/api/habit_type/habitTypeUser/${AuthService.userId.toString()}'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -47,7 +47,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   }
 
   Future<List<dynamic>> fetchFrequencies() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/frequencies'));
+    final response = await http.get(Uri.parse('https://marin.terrabyteco.com/api/frequencies'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -56,7 +56,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   }
 
   Future<List<dynamic>> fetchStatuses() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/statuses'));
+    final response = await http.get(Uri.parse('https://marin.terrabyteco.com/api/statuses'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -65,7 +65,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   }
 
   Future<List<dynamic>> fetchUsers() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/users'));
+    final response = await http.get(Uri.parse('https://marin.terrabyteco.com/api/users'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -77,7 +77,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   final String type = _typeController.text.trim();
   if (type.isNotEmpty) {
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/api/habit_types/create'),
+      Uri.parse('https://marin.terrabyteco.com/api/habit_types/create'),
       body: {
         'type': type,
         'user_id': AuthService.userId.toString(), // Incluir el user_id aquí
@@ -110,7 +110,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         _selectedStatus != null &&
         _descriptionController.text.isNotEmpty) {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/habits/create'),
+        Uri.parse('https://marin.terrabyteco.com/api/habits/create'),
         body: {
           "description": _descriptionController.text,
           "user_id": AuthService.userId.toString(),
