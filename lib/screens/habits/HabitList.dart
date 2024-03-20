@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto/models/Habit.dart';
+import 'package:proyecto/screens/habits/HabitItem.dart';
 import 'package:proyecto/screens/habits/UpdateHabitPage.dart';
 import 'package:proyecto/screens/login/AuthService.dart';
 
@@ -76,38 +77,38 @@ class _HabitListState extends State<HabitList> {
                   itemCount: displayedHabits.length,
                   itemBuilder: (context, index) {
                     Habit habit = displayedHabits[index];
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
-                        );
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.blue[50],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.blue[50],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => HabitItem(id: habit.id)),
+                              );
+                            },
+                            child: Text(
                               habit.habitType.type,
                               style: TextStyle(fontSize: 18),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     );
                   },
