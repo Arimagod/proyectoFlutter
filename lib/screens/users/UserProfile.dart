@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto/HomePage.dart';
@@ -17,16 +19,36 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-
 
   bool _isEditing = false;
 
   @override
   void initState() {
     super.initState();
-    _nameController.text = AuthService.userName;
-    _emailController.text = AuthService.userEmail;
+    _getUserData(); // Obtener datos del usuario al inicio
+  }
+
+  Future<void> _getUserData() async {
+    final response = await http.get(
+      Uri.parse('https://marin.terrabyteco.com/api/users/${AuthService.userId.toString()}'),
+    );
+
+    if (response.statusCode == 200) {
+      final userData = jsonDecode(response.body);
+      setState(() {
+        AuthService.userName = userData['name'];
+        AuthService.userEmail = userData['email'];
+        _nameController.text = AuthService.userName;
+        _emailController.text = AuthService.userEmail;
+      });
+    } else {
+      // Muestra un Snackbar en caso de error al obtener los datos del usuario
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to fetch user data.'),
+        ),
+      );
+    }
   }
 
   Future<void> _updateUser() async {
@@ -36,8 +58,6 @@ class _ProfilePageState extends State<ProfilePage> {
         'id': AuthService.userId.toString(),
         'name': _nameController.text,
         'email': _emailController.text,
-        'password': _passwordController.text, // Asegúrate de que tu API espera este campo
-
       },
     );
 
@@ -48,6 +68,8 @@ class _ProfilePageState extends State<ProfilePage> {
           content: Text('User updated successfully.'),
         ),
       );
+      // Obtener los datos actualizados después de actualizar el usuario
+      _getUserData();
     } else {
       // Muestra un Snackbar en caso de error al actualizar el usuario
       ScaffoldMessenger.of(context).showSnackBar(
@@ -92,17 +114,17 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: Colors.blue,
-      title: const Text(
-        'Perfil de Usuario',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Perfil de Usuario',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
+        centerTitle: true,
       ),
-      centerTitle: true,
-    ),
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
@@ -134,10 +156,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               if (_isEditing) SizedBox(height: 20),
-              if (_isEditing)
-
-              SizedBox(height: 20),
-              
+              if (_isEditing) SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -145,25 +164,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue, 
+                  primary: Colors.blue,
                   onPrimary: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                  ),  
+                      borderRadius: BorderRadius.circular(10)),
                 ),
                 child: Text(_isEditing ? 'Cancelar' : 'Editar'),
               ),
               if (_isEditing) SizedBox(height: 10),
               if (_isEditing)
-              ElevatedButton(
+                ElevatedButton(
                   onPressed: _updateUser,
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue, 
-                    onPrimary: Colors.white, 
-                    padding: EdgeInsets.symmetric(vertical: 20), 
+                    primary: Colors.blue,
+                    onPrimary: Colors.white,
+                    padding: EdgeInsets.symmetric(vertical: 20),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10), 
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: const Text(
@@ -182,23 +200,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextStyle(fontSize: 16),
                 ),
               ElevatedButton(
-              onPressed: _logout,
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
-                padding: EdgeInsets.symmetric(vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                onPressed: _logout,
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Cerrar sesión',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              child: const Text(
-                'Cerrar sesión',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
             ],
           ),
         ),
