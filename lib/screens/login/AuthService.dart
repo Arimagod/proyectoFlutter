@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto/HomePage.dart';
+import 'package:proyecto/LoginPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
@@ -11,8 +12,22 @@ class AuthService {
   static String userName = '';
   static String password = '';
 
-  static Future<void> login(
-      BuildContext context, String email, String password) async {
+  static Future<Map<String, dynamic>> checkToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedToken = prefs.getString('token');
+    final isLoggedIn = savedToken != null && savedToken.isNotEmpty;
+    if (isLoggedIn) {
+      // Si hay un token guardado, establecerlo como el token actual
+      token = savedToken!;
+      // Obtener otros datos del usuario guardados
+      userId = prefs.getInt('userId') ?? 0;
+      userName = prefs.getString('userName') ?? '';
+      userEmail = prefs.getString('userEmail') ?? '';
+    }
+    return {'isLoggedIn': isLoggedIn, 'userId': userId, 'userName': userName, 'userEmail': userEmail};
+  }
+
+  static Future<void> login(BuildContext context, String email, String password) async {
     final url = Uri.parse('https://marin.terrabyteco.com/api/auth/login');
 
     try {
@@ -36,9 +51,12 @@ class AuthService {
         userEmail = userProfile['email'];
         userName = userProfile['name'];
 
-        // Guardar el token de acceso en SharedPreferences
+        // Guardar el token de acceso y otros datos del usuario en SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         prefs.setString('token', token);
+        prefs.setInt('userId', userId);
+        prefs.setString('userName', userName);
+        prefs.setString('userEmail', userEmail);
 
         Navigator.pushAndRemoveUntil(
           context,
@@ -65,19 +83,16 @@ class AuthService {
     }
   }
 
-  // Recuperar el token de acceso de SharedPreferences
-  static Future<void> checkToken(BuildContext context) async {
+  static Future<void> logout(BuildContext context) async {
+    // Eliminar el token de SharedPreferences
     final prefs = await SharedPreferences.getInstance();
-    final savedToken = prefs.getString('token');
-    if (savedToken != null && savedToken.isNotEmpty) {
-      // Si hay un token guardado, establecerlo como el token actual
-      token = savedToken;
-      // Redirigir a la página principal
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-        (route) => false, // Remove all routes from stack
-      );
-    }
+    prefs.remove('token');
+
+    // Redirigir al usuario a la página de inicio de sesión
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage(title: "",)),
+      (route) => false, // Remove all routes from stack
+    );
   }
 }

@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:proyecto/HomePage.dart';
 import 'package:proyecto/LoginPage.dart';
 import 'package:proyecto/screens/habits/CreateHabit.dart';
-import 'package:proyecto/screens/habits/CreateHabitPage.dart';
 import 'package:proyecto/screens/habits/CreateHabitType.dart';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
 import 'package:proyecto/screens/habits/UpdateHabitTypeForm.dart';
@@ -52,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _updateUser() async {
-    final response = await http.post(
+      final response = await http.post(
       Uri.parse('https://marin.terrabyteco.com/api/users/update'),
       body: {
         'id': AuthService.userId.toString(),
@@ -78,6 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     }
+    // Tu código para actualizar el usuario
   }
 
   void _logout() {
@@ -97,11 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
             TextButton(
               child: Text('Sí'),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage(title: '',)),
-                );
-                // AuthService.logout(); // Descomenta esta línea si tienes un método de cierre de sesión en AuthService.
+                AuthService.logout(context); // Llama al método de cierre de sesión
               },
             ),
           ],

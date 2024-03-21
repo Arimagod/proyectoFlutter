@@ -56,125 +56,128 @@ class _HabitDetailPageState extends State<HabitDetail> {
         ),
         centerTitle: true,
       ),
-      body: Container(
-          child: FutureBuilder<List<Habit>>(
-            future: futureHabit,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SingleChildScrollView(
-                    child: DataTable(
-                      columnSpacing: 20,
-                      dataRowHeight: 60,
-                      columns: const [
-                        DataColumn(
-                          label: Text(
-                            'Usuario',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Tipo del Hábito',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Frecuencia',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Estado',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                      ],
-                      rows: snapshot.data!.map((habit) {
-                        return DataRow(cells: [
-                          DataCell(
-                            Text(
-                              habit.user.name,
-                              style: const TextStyle(
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              habit.habitType.type,
-                              style: const TextStyle(
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              habit.frequency.frequency,
-                              style: const TextStyle(
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              habit.status.status,
-                              style: const TextStyle(
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ]);
-                      }).toList(),
+     body: Center(
+  child: Container(
+    width: MediaQuery.of(context).size.width * 0.9, // Ancho del contenedor
+    child: FutureBuilder<List<Habit>>(
+      future: futureHabit,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SingleChildScrollView(
+              child: DataTable(
+                columnSpacing: 20,
+                dataRowHeight: 60,
+                columns: const [
+                  DataColumn(
+                    label: Text(
+                      'Usuario',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
-                );
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '¡No tienes Habitos para mostrar  aún!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red, // Cambia el color a rojo para que sea más llamativo
-                        ),
+                  DataColumn(
+                    label: Text(
+                      'Tipo del Hábito',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
                       ),
-                      SizedBox(height: 10), // Espaciado adicional
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Frecuencia',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Estado',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+                rows: snapshot.data!.map((habit) {
+                  return DataRow(cells: [
+                    DataCell(
                       Text(
-                        'Empieza creando uno nuevo.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
+                        habit.user.name,
+                        style: const TextStyle(
                           color: Colors.black87,
                         ),
                       ),
-                    ],
+                    ),
+                    DataCell(
+                      Text(
+                        habit.habitType.type,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        habit.frequency.frequency,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        habit.status.status,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ]);
+                }).toList(),
+              ),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '¡No tienes Habitos para mostrar  aún!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red, // Cambia el color a rojo para que sea más llamativo
                   ),
-                );
-              }
-              return CircularProgressIndicator();
-            },
-          ),
-        ),
+                ),
+                SizedBox(height: 10), // Espaciado adicional
+                Text(
+                  'Empieza creando uno nuevo.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        return CircularProgressIndicator();
+      },
+    ),
+  ),
+),
         bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.blue,
