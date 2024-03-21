@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:proyecto/HomePage.dart';
+import 'package:proyecto/screens/habits/CreateHabitPage.dart';
+import 'package:proyecto/screens/habits/CreateHabitType.dart';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
 import 'package:proyecto/screens/habits/UpdateHabitTypeForm.dart';
+import 'dart:convert';
+
 import 'package:proyecto/screens/login/AuthService.dart';
 import 'package:proyecto/screens/users/UserProfile.dart';
 
-class CreateHabitPage extends StatefulWidget {
+class CreateHabit extends StatefulWidget {
   @override
-  _CreateHabitPageState createState() => _CreateHabitPageState();
+  _CreateHabitState createState() => _CreateHabitState();
 }
 
-class _CreateHabitPageState extends State<CreateHabitPage> {
+class _CreateHabitState extends State<CreateHabit> {
   final TextEditingController _typeController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -74,38 +76,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     }
   }
 
-  Future<void> _createHabitType() async {
-  final String type = _typeController.text.trim();
-  if (type.isNotEmpty) {
-    final response = await http.post(
-      Uri.parse('https://marin.terrabyteco.com/api/habit_types/create'),
-      body: {
-        'type': type,
-        'user_id': AuthService.userId.toString(), // Incluir el user_id aquí
-      },
-    );
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Tipo de hábito creado correctamente')),
-      );
-      setState(() {
-        _habitTypeCreated = true;
-      });
-      _typeController.clear();
-      futureHabitTypes = fetchHabitTypes();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al crear el tipo de hábito')),
-      );
-    }
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Por favor, introduce un tipo de hábito')),
-    );
-  }
-}
-
-  Future<void> _createHabit() async {
+  Future<void> createHabit() async {
     if (_selectedHabitType != null &&
         _selectedFrequency != null &&
         _selectedStatus != null &&
@@ -125,11 +96,6 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Hábito creado exitosamente')),
         );
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error al crear el hábito')),
@@ -148,7 +114,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          _habitTypeCreated ? 'Definir Hábito' : 'Crear Tipo de Hábito',
+          'Definir Hábito',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -162,53 +128,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (!_habitTypeCreated)
-              Column(
-                children: [
-                  Text(
-                    'Tipo de Hábito',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  TextField(
-                    controller: _typeController,
-                    decoration: InputDecoration(
-                      hintText: 'Introduce el tipo de hábito',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: _createHabitType,
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: Text(
-                      'Crear Tipo de Hábito',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            if (_habitTypeCreated)
-              Column(
-                children: [
-                  FutureBuilder<List<dynamic>>(
+             FutureBuilder<List<dynamic>>(
                     future: futureHabitTypes,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -332,7 +252,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                   ),
                   SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: _createHabit,
+                    onPressed: createHabit,
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue,
                       padding: EdgeInsets.symmetric(vertical: 20),
@@ -341,7 +261,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                       ),
                     ),
                     child: Text(
-                      'Crear Hábito',
+                      'Crear',
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
@@ -349,12 +269,10 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                       ),
                     ),
                   ),
-                ],
-              ),
           ],
         ),
       ),
-       bottomNavigationBar: BottomNavigationBar(
+     bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.blue,
         items: const <BottomNavigationBarItem>[
@@ -389,7 +307,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                 color: Colors.white,
               ),
             ),
-            label: "Crear Hábito",
+            label: "Crear",
           ),
           BottomNavigationBarItem(
             icon: Padding(
@@ -400,7 +318,18 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                 color: Colors.white,
               ),
             ),
-            label: "Editar nombre de hábito",
+            label: "Definir",
+          ),
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: EdgeInsets.only(bottom: 5.0), // Ajusta la separación vertical
+              child: Icon(
+                Icons.edit_attributes_sharp,
+                size: 30,
+                color: Colors.white,
+              ),
+            ),
+            label: "Editar Tipo",
           ),
           BottomNavigationBarItem(
             icon: Padding(
@@ -428,7 +357,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.push(
+            Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const HomePage()),
               );
@@ -442,7 +371,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
             case 2:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CreateHabitPage()),
+                MaterialPageRoute(builder: (context) => CreateHabitTypePage()),
               ).then((_) {
                 // Refresh the page when returning from CreateHabitPage
                 Navigator.pushReplacement(
@@ -451,10 +380,10 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                 );
               });
               break;
-            case 3:
+              case 3:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  UpdateHabitTypePage()),
+                MaterialPageRoute(builder: (context) => CreateHabit()),
               ).then((_) {
                 // Refresh the page when returning from CreateHabitPage
                 Navigator.pushReplacement(
@@ -466,6 +395,18 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
             case 4:
               Navigator.push(
                 context,
+                MaterialPageRoute(builder: (context) =>  UpdateHabitTypePage()),
+              ).then((_) {
+                // Refresh the page when returning from CreateHabitPage
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              });
+              break;
+            case 5:
+              Navigator.push(
+                context,
                 MaterialPageRoute(builder: (context) => ProfilePage()),
               );
               break;
@@ -473,7 +414,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         },
         elevation: 0.0,
       ),
-       
+
     );
   }
 }

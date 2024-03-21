@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto/HomePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   static int userId = 0;
@@ -33,13 +34,16 @@ class AuthService {
         token = responseData['access_token'];
         userEmail = userProfile['email'];
         userName = userProfile['name'];
-       
+
+        // Guardar el token de acceso en SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('token', token);
+
         Navigator.pushAndRemoveUntil(
           context,
-  MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage()),
           (route) => false, // Remove all routes from stack
-         ) ;
-        
+        );
       } else {
         final errorMessage = responseData['response'];
         ScaffoldMessenger.of(context).showSnackBar(
@@ -56,6 +60,21 @@ class AuthService {
           content: Text('Error: $error'),
           backgroundColor: Colors.red,
         ),
+      );
+    }
+  }
+
+  // Recuperar el token de acceso de SharedPreferences
+  static Future<void> checkToken(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedToken = prefs.getString('token');
+    if (savedToken != null && savedToken.isNotEmpty) {
+      // Si hay un token guardado, establecerlo como el token actual
+      token = savedToken;
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+        (route) => false, // Remove all routes from stack
       );
     }
   }

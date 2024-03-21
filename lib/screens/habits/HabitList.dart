@@ -45,81 +45,107 @@ class _HabitListState extends State<HabitList> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<Habit>>(
-      future: futureHabits,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('No tienes hábitos registrados'));
-        } else if (snapshot.hasData) {
-          if (displayedHabits.isEmpty) {
-            displayedHabits = snapshot.data!;
-          }
-          return Column(
+Widget build(BuildContext context) {
+  return FutureBuilder<List<Habit>>(
+    future: futureHabits,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: TextField(
-                  onChanged: (text) {
-                    filterHabits(text, snapshot.data!);
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Buscar hábito',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
-                  ),
+              Text(
+                'No tienes hábitos creados. ¿Por qué no?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red, // Cambia el color a rojo para que sea más llamativo
                 ),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: displayedHabits.length,
-                  itemBuilder: (context, index) {
-                    Habit habit = displayedHabits[index];
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HabitItem(id: habit.id)),
-                        );
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.blue[50],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              habit.habitType.type,
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+              SizedBox(height: 10), // Espaciado adicional
+              Text(
+                '¡empieza a crear uno!.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
                 ),
               ),
             ],
-          );
-        } else {
-          return Center(child: Text('No hay hábitos disponibles'));
+          ),
+        );
+      } else if (snapshot.hasData) {
+        if (displayedHabits.isEmpty) {
+          displayedHabits = snapshot.data!;
         }
-      },
-    );
-  }
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: TextField(
+                onChanged: (text) {
+                  filterHabits(text, snapshot.data!);
+                },
+                decoration: InputDecoration(
+                  hintText: 'Buscar tipo de hábito',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: displayedHabits.length,
+                itemBuilder: (context, index) {
+                  Habit habit = displayedHabits[index];
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HabitItem(id: habit.id)),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.blue[50],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            habit.habitType.type,
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => UpdateHabitPage(habit: habit)),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      } else {
+        return Center(child: Text('No hay hábitos disponibles'));
+      }
+    },
+  );
 }
+    
+ }
+

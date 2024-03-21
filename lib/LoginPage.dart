@@ -17,6 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   late SharedPreferences _prefs;
   bool _rememberCredentials = false;
+  bool _showPassword = false;
 
   @override
   void initState() {
@@ -46,164 +47,175 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void togglePasswordVisibility() {
+    setState(() {
+      _showPassword = !_showPassword;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-
-      body: SingleChildScrollView(child: 
-      Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-        decoration:  BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.blue.withOpacity(0.7), Colors.blue.withOpacity(0.2)],
+      body: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.blue.withOpacity(0.7), Colors.blue.withOpacity(0.2)],
+            ),
           ),
-        ),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              SizedBox(height: 40),
-              Text(
-                'Bienvenido',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 36,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    Shadow(
-                      color: Colors.blue.withOpacity(0.5),
-                      blurRadius: 5,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                  prefixIcon: Icon(Icons.email, color: Colors.white.withOpacity(0.7)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Contraseña',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                  prefixIcon: Icon(Icons.lock, color: Colors.white.withOpacity(0.7)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
-                  ),
-                ),
-                obscureText: true,
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _rememberCredentials,
-                    onChanged: (value) {
-                      setState(() {
-                        _rememberCredentials = value!;
-                      });
-                    },
-                  ),
-                  Text('Recordar credenciales', style: TextStyle(color: Colors.white)),
-                ],
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  await _savePreferences();
-                  AuthService.login(context, _emailController.text, _passwordController.text);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.9),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  'Iniciar Sesión',
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SizedBox(height: 40),
+                Text(
+                  'Bienvenido',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginRegister(title: '')),
-                  );
-                },
-                child: const Text(
-                  'Registrarse',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 36,
                     color: Colors.white,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Column(
-                children: <Widget>[
-                  const Text(
-                    '¿Necesitas ayuda? Contáctanos',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.whatshot, color: Colors.white),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.email, color: Colors.white),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.facebook, color: Colors.white),
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        color: Colors.blue.withOpacity(0.5),
+                        blurRadius: 5,
                       ),
                     ],
                   ),
-                ],
-              ),
-            ],
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    prefixIcon: Icon(Icons.email, color: Colors.white.withOpacity(0.7)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Contraseña',
+                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    prefixIcon: Icon(Icons.lock, color: Colors.white.withOpacity(0.7)),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _showPassword ? Icons.visibility : Icons.visibility_off,
+                        color: Colors.white.withOpacity(0.7),
+                      ),
+                      onPressed: togglePasswordVisibility,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+                    ),
+                  ),
+                  obscureText: !_showPassword,
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _rememberCredentials,
+                      onChanged: (value) {
+                        setState(() {
+                          _rememberCredentials = value!;
+                        });
+                      },
+                    ),
+                    Text('Recordar credenciales', style: TextStyle(color: Colors.white)),
+                  ],
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    await _savePreferences();
+                    AuthService.login(context, _emailController.text, _passwordController.text);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white.withOpacity(0.9),
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'Iniciar Sesión',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginRegister(title: '')),
+                    );
+                  },
+                  child: const Text(
+                    'Registrarse',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Column(
+                  children: <Widget>[
+                    const Text(
+                      '¿Necesitas ayuda? Contáctanos',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.whatshot, color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.email, color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.facebook, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
-      ),
-      
     );
   }
 }
