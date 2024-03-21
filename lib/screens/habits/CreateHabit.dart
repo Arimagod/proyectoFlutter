@@ -128,12 +128,14 @@ class _CreateHabitState extends State<CreateHabit> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-             FutureBuilder<List<dynamic>>(
-                    future: futureHabitTypes,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return DropdownButtonFormField<String>(
-                          value: _selectedHabitType,
+            FutureBuilder<List<dynamic>>(
+              future: futureHabitTypes,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  return DropdownButtonFormField<String>(
+                    value: _selectedHabitType,
                           onChanged: (String? value) {
                             setState(() {
                               _selectedHabitType = value!;
@@ -152,16 +154,17 @@ class _CreateHabitState extends State<CreateHabit> {
                             'Selecciona el Tipo de Hábito',
                             style: TextStyle(color: Colors.blue),
                           ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                          '${snapshot.error}',
-                          style: TextStyle(color: Colors.red),
-                        );
-                      }
-                      return CircularProgressIndicator();
-                    },
-                  ),
+                    
+                  );
+                } else {
+                  return Text(
+                    'No hay tipos de hábitos disponibles',
+                    style: TextStyle(color: Colors.blue),
+                  );
+                }
+              },
+            ),
+             
                   SizedBox(height: 16.0),
                   FutureBuilder<List<dynamic>>(
                     future: futureFrequencies,

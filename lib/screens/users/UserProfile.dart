@@ -170,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                child: Text(_isEditing ? 'Cancelar' : 'Editar'),
+                child: Text(_isEditing ? 'Cerrar' : 'Editar'),
               ),
               if (_isEditing) SizedBox(height: 10),
               if (_isEditing)

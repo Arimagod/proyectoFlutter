@@ -134,7 +134,7 @@ class _UpdateHabitTypePageState extends State<UpdateHabitTypePage> {
                 ),
               ),
               child: Text(
-                'Actualizar Tipo de Hábito',
+                'Actualizar',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
