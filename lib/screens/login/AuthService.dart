@@ -9,6 +9,7 @@ class AuthService {
   static String token = '';
   static String userEmail = '';
   static String userName = '';
+  static String password = '';
 
   static Future<void> login(
       BuildContext context, String email, String password) async {
@@ -71,6 +72,7 @@ class AuthService {
     if (savedToken != null && savedToken.isNotEmpty) {
       // Si hay un token guardado, establecerlo como el token actual
       token = savedToken;
+      // Redirigir a la página principal
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),

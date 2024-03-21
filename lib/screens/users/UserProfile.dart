@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+
   bool _isEditing = false;
 
   @override
@@ -28,43 +29,30 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController.text = AuthService.userEmail;
   }
 
-  Future<void> _updateProfile() async {
-    final url = Uri.parse('https://marin.terrabyteco.com/api/users/update/${AuthService.userId}');
+  Future<void> _updateUser() async {
+    final response = await http.post(
+      Uri.parse('https://marin.terrabyteco.com/api/users/update'),
+      body: {
+        'id': AuthService.userId.toString(),
+        'name': _nameController.text,
+        'email': _emailController.text,
+        'password': _passwordController.text, // Asegúrate de que tu API espera este campo
 
-    try {
-      final response = await http.put(
-        url,
-        headers: {'Authorization': 'Bearer ${AuthService.token}'},
-        body: {
-          'name': _nameController.text,
-          'email': _emailController.text,
-          'password': _passwordController.text,
-        },
-      );
+      },
+    );
 
-      if (response.statusCode == 200) {
-        // Mostrar mensaje de éxito al usuario
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Perfil modificado con éxito'),
-          ),
-        );
-      } else {
-        // Manejar errores de actualización del perfil
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error al actualizar el perfil'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } catch (error) {
-      print('Error: $error');
-      // Manejar errores de conexión o excepciones
+    if (response.statusCode == 200) {
+      // Muestra un Snackbar para indicar que el usuario se ha actualizado correctamente
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error de conexión'),
-          backgroundColor: Colors.red,
+        const SnackBar(
+          content: Text('User updated successfully.'),
+        ),
+      );
+    } else {
+      // Muestra un Snackbar en caso de error al actualizar el usuario
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to update user.'),
         ),
       );
     }
@@ -147,18 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               if (_isEditing) SizedBox(height: 20),
               if (_isEditing)
-                Text(
-                  'Contraseña:',
-                  style: TextStyle(fontSize: 18),
-                ),
-              if (_isEditing)
-                TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  obscureText: true,
-                ),
+
               SizedBox(height: 20),
               
               ElevatedButton(
@@ -180,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
               if (_isEditing) SizedBox(height: 10),
               if (_isEditing)
               ElevatedButton(
-                  onPressed: _updateProfile,
+                  onPressed: _updateUser,
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue, 
                     onPrimary: Colors.white, 

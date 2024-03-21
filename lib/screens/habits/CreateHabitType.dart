@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:proyecto/HomePage.dart';
+import 'package:proyecto/screens/habit_types/HabitTypeList.dart';
 import 'package:proyecto/screens/habits/CreateHabit.dart';
 import 'package:proyecto/screens/habits/HabitDetail.dart';
 import 'package:proyecto/screens/habits/UpdateHabitTypeForm.dart';
@@ -108,9 +109,14 @@ class _CreateHabitTypePageState extends State<CreateHabitTypePage> {
                 ),
               ),
             ),
+            SizedBox(height: 20), // Espacio adicional
+            Expanded(
+              child: HabitTypeList(), // Aquí se llama al widget HabitTypeList
+            ),
           ],
         ),
       ),
+    
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.blue,
