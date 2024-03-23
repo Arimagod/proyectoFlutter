@@ -77,7 +77,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     }
-    // Tu código para actualizar el usuario
   }
 
   void _logout() {
@@ -152,23 +151,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               if (_isEditing) SizedBox(height: 20),
-              if (_isEditing) SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _isEditing = !_isEditing;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  onPrimary: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                child: Text(_isEditing ? 'Cerrar' : 'Editar'),
-              ),
-              if (_isEditing) SizedBox(height: 10),
               if (_isEditing)
                 ElevatedButton(
                   onPressed: _updateUser,
@@ -189,6 +171,22 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
+              if (_isEditing) SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _isEditing = !_isEditing;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                  onPrimary: Colors.white,
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+                child: Text(_isEditing ? 'Cerrar' : 'Editar'),
+              ),
               SizedBox(height: 20),
               if (_isEditing)
                 Text(
